@@ -33,14 +33,6 @@ class InitCommand extends Command
         $path = $input->getOption('path');
         $jsonPath = $path ? realpath($path) : './build.json';
 
-        if (file_exists($jsonPath)) {
-            if (
-                !$io->confirm('A "build.json" file already exists at this location. Do you want to overwrite it?')
-            ) {
-                return 1;
-            }
-        }
-
         $name = $io->ask('Project name', dirname(realpath($jsonPath)));
         $version = $io->ask('Version', '0.1');
         $mainFile = $io->ask('Path to main file', 'includes/main.php');
@@ -87,10 +79,41 @@ class InitCommand extends Command
         ];
 
         $json = json_encode($array, JSON_PRETTY_PRINT);
-        file_put_contents($jsonPath, $json);
 
-        $io->success('Project created successfully!');
+        $io->newLine();
+        $io->writeln($json);
+        $io->newLine();
 
-        return 0;
+        if ($this->confirmCreateFile($io, $json, $jsonPath)) {
+            file_put_contents($jsonPath, $json);
+            $io->success('Project created successfully!');
+            return 0;
+        } else {
+            $io->error('Project creation cancelled.');
+            return 1;
+        }
+    }
+
+    /** Confirms with the user whether the build.json file should be created. */
+    protected function confirmCreateFile(OutputStyle $io, string $contents, string $path): bool
+    {
+        $io->newLine();
+        $io->writeln($contents);
+        $io->newLine();
+
+        if (!$io->confirm('Does this look good?')) {
+            return false;
+        }
+
+        if (file_exists($path)) {
+            $fileName = basename($path);
+            $article = in_array($fileName[0], ['a', 'e', 'i', 'o', 'u']) ? 'An' : 'A';
+
+            if (!$io->confirm("{$article} \"{$fileName}\" file already exists. Do you want to overwrite it?")) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
