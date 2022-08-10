@@ -79,10 +79,6 @@ class InitCommand extends Command
 
         $json = json_encode($array, JSON_PRETTY_PRINT);
 
-        $io->newLine();
-        $io->writeln($json);
-        $io->newLine();
-
         if ($this->confirmCreateFile($io, $json, $jsonPath)) {
             file_put_contents($jsonPath, $json);
             $io->success('Project created successfully!');
