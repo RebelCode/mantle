@@ -14,7 +14,8 @@
     "wordpress",
     "plugin",
     "build",
-    "tool"
+    "tool",
+    "dev"
   ],
   "scripts": {
     "test": "vendor/bin/phpunit"
