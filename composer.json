@@ -16,6 +16,9 @@
     "build",
     "tool"
   ],
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  },
   "require": {
     "php": ">=7.3",
     "ext-json": "*",
