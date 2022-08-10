@@ -5,6 +5,7 @@ namespace RebelCode\Mantle\Tests\Project;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RebelCode\Mantle\Project\Info;
+use RebelCode\Mantle\Project\WpOrgInfo;
 
 class InfoTest extends TestCase
 {
@@ -31,6 +32,7 @@ class InfoTest extends TestCase
         $this->assertNull($info->minWpVer);
         $this->assertNull($info->minPhpVer);
         $this->assertNull($info->license);
+        $this->assertNull($info->wpOrgInfo);
     }
 
     public function test_it_should_construct_from_array()
@@ -51,6 +53,12 @@ class InfoTest extends TestCase
             'minWpVer' => '4.0',
             'minPhpVer' => '7.0',
             'license' => 'GPLv3',
+            'wpOrg' => [
+                'slug' => 'Test Plugin - All your testing needs',
+                'testedUpTo' => '6.0',
+                'tags' => ['wordpress', 'plugin', 'test'],
+                'contributors' => ['John Doe', 'Jane Doe'],
+            ],
         ];
 
         $info = Info::fromArray($array);
@@ -68,6 +76,12 @@ class InfoTest extends TestCase
         $this->assertSame($array['domainPath'], $info->domainPath);
         $this->assertSame($array['minWpVer'], $info->minWpVer);
         $this->assertSame($array['minPhpVer'], $info->minPhpVer);
+
+        $this->assertInstanceOf(WpOrgInfo::class, $info->wpOrgInfo);
+        $this->assertEquals($array['wpOrg']['slug'], $info->wpOrgInfo->slug);
+        $this->assertEquals($array['wpOrg']['testedUpTo'], $info->wpOrgInfo->testedUpTo);
+        $this->assertEquals($array['wpOrg']['tags'], $info->wpOrgInfo->tags);
+        $this->assertEquals($array['wpOrg']['contributors'], $info->wpOrgInfo->contributors);
     }
 
     public function test_it_should_throw_if_array_is_missing_the_name()
