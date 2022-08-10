@@ -30,6 +30,7 @@ class InfoTest extends TestCase
         $this->assertNull($info->authorUrl);
         $this->assertNull($info->minWpVer);
         $this->assertNull($info->minPhpVer);
+        $this->assertNull($info->license);
     }
 
     public function test_it_should_construct_from_array()
@@ -49,6 +50,7 @@ class InfoTest extends TestCase
             'domainPath' => '/my-domain',
             'minWpVer' => '4.0',
             'minPhpVer' => '7.0',
+            'license' => 'GPLv3',
         ];
 
         $info = Info::fromArray($array);
