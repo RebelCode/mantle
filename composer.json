@@ -1,0 +1,45 @@
+{
+  "name": "rebelcode/mantle",
+  "description": "The build tool used by RebelCode to build WordPress plugins",
+  "license": "GPL-3.0-or-later",
+  "bin": ["bin/mantle"],
+  "authors": [
+    {
+      "name": "RebelCode",
+      "email": "dev@rebelcode.com"
+    }
+  ],
+  "keywords": [
+    "rebelcode",
+    "wordpress",
+    "plugin",
+    "build",
+    "tool"
+  ],
+  "require": {
+    "php": ">=7.3",
+    "ext-json": "*",
+    "ext-zip": "*",
+    "symfony/console": "^5.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "8.5.x-dev",
+    "mikey179/vfsstream": "2.0.x-dev",
+    "roots/wordpress-no-content": "^6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "RebelCode\\Mantle\\": "./src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "RebelCode\\Mantle\\Tests\\": "./tests/Mantle"
+    }
+  },
+  "config": {
+    "platform": {
+      "php": "7.3.0"
+    }
+  }
+}

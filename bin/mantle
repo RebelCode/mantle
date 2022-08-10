@@ -1,0 +1,34 @@
+#!/usr/bin/env php
+<?php
+
+use RebelCode\Mantle\Command\BuildCommand;
+use RebelCode\Mantle\Command\CleanCommand;
+use RebelCode\Mantle\Command\DevCommand;
+use RebelCode\Mantle\Command\InitCommand;
+use Symfony\Component\Console\Application;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+const MANTLE_LOGO = <<<LOGO
+                           _    _       
+  _ __ ___    __ _  _ __  | |_ | |  ___ 
+ | '_ ` _ \  / _` || '_ \ | __|| | / _ \
+ | | | | | || (_| || | | || |_ | ||  __/
+ |_| |_| |_| \__,_||_| |_| \__||_| \___|
+
+LOGO;
+
+$app = new Application('Mantle', '0.1');
+$app->add(new InitCommand());
+$app->add(new BuildCommand());
+$app->add(new DevCommand());
+$app->add(new CleanCommand());
+
+try {
+    $app->run();
+    exit(0);
+} catch (Exception $e) {
+    fprintf(STDERR, $e->getMessage() . ', thrown in ' . $e->getFile() . ':' . $e->getLine() . PHP_EOL);
+    fprintf(STDERR, "Stack trace:\n" . $e->getTraceAsString());
+    exit(1);
+}

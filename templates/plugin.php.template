@@ -1,0 +1,151 @@
+<?php
+
+/**
+ * @wordpress-plugin
+ *
+ * Plugin Name:       {{name}}
+ * Plugin URI:        {{url}}
+ * Description:       {{description}}
+ * Version:           {{version}}
+ * Requires at least: {{minWpVer}}
+ * Requires PHP:      {{minPhpVer}}
+ * Author:            {{author}}
+ * Author URI:        {{authorUrl}}
+ * Text Domain:       {{textDomain}}
+ * Domain Path:       {{domainPath}}
+ * License:           {{license}}
+ */
+
+// Exit if not called from WordPress.
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+/*-----------------------------------------------------------------------------
+ * Plugin Constants
+ ----------------------------------------------------------------------------*/
+
+if (!defined('{{constantId}}_FILE')) {
+    define('{{constantId}}_FILE', __FILE__);
+    define('{{constantId}}_DIR', __DIR__);
+    define('{{constantId}}_BASENAME', plugin_basename(__FILE__));
+    define('{{constantId}}_VERSION', '{{version}}');
+}
+
+/*-----------------------------------------------------------------------------
+ * Check requirements
+ ----------------------------------------------------------------------------*/
+
+$requirementsMet = true;
+
+if (version_compare(PHP_VERSION, '{{minPhpVer}}', '<')) {
+    $requirementsMet = false;
+    add_action('admin_notices', function () {
+        printf(
+            '<div class="notice notice-error"><p>%s</p></div>',
+            sprintf(
+                __('<b>%s</b> requires PHP version %s or higher.', '{{textDomain}}'),
+                '{{name}}',
+                '{{minPhpVer}}'
+            )
+        );
+    });
+}
+
+global $wp_version;
+if (version_compare($wp_version, '{{minWpVer}}', '<')) {
+    $requirementsMet = false;
+    add_action('admin_notices', function () {
+        printf(
+            '<div class="notice notice-error"><p>%s</p></div>',
+            sprintf(
+                __('<b>%s</b> requires WordPress version %s or higher.', '{{textDomain}}'),
+                '{{name}}',
+                '{{minWpVer}}'
+            )
+        );
+    });
+}
+
+/*-----------------------------------------------------------------------------
+ * Internationalization
+ ----------------------------------------------------------------------------*/
+
+// Load translations
+add_action('init', function () {
+    $directory = dirname(plugin_basename(__FILE__)) . '{{domainPath}}';
+    load_plugin_textdomain('{{textDomain}}', false, $directory);
+});
+
+/*-----------------------------------------------------------------------------
+ * Plugin Operations
+ ----------------------------------------------------------------------------*/
+
+// Activation
+register_activation_hook(__FILE__, function () {
+    if (!current_user_can('activate_plugins')) {
+        return;
+    }
+
+    $plugin = isset($_REQUEST['plugin']) ? $_REQUEST['plugin'] : '';
+    check_admin_referer("activate-plugin_{$plugin}");
+
+    do_action('{{shortId}}/activate');
+});
+
+// Deactivation
+register_deactivation_hook(__FILE__, function () {
+    if (!current_user_can('activate_plugins')) {
+        return;
+    }
+
+    $plugin = isset($_REQUEST['plugin']) ? $_REQUEST['plugin'] : '';
+    check_admin_referer("deactivate-plugin_{$plugin}");
+
+    do_action('{{shortId}}/deactivate');
+});
+
+// Uninstallation
+register_uninstall_hook(__FILE__, '{{shortId}}_uninstall');
+function {{shortId}}_uninstall() {
+    if (!current_user_can('activate_plugins')) {
+        return;
+    }
+
+    check_admin_referer('bulk-plugins');
+
+    do_action('{{shortId}}/uninstall');
+}
+
+// Upgrade
+add_action('init', function () {
+    $prev = get_option('{{shortId}}/version', '0.0.0');
+    $curr = constant('{{constantId}}_VERSION');
+
+    // Check if previous version is less than the current version
+    if (version_compare($prev, $curr, '<')) {
+        do_action('{{shortId}}/upgrade', $prev, $curr);
+        update_option('{{shortId}}/version', $curr, true);
+    }
+
+    // Check if previous version is greater than the current version
+    if (version_compare($prev, $curr, '>')) {
+        do_action('{{shortId}}/downgrade', $prev, $curr);
+        update_option('{{shortId}}/version', $curr, true);
+    }
+
+    // Check if a new installation
+    if ($prev === '0.0.0') {
+        do_action('{{shortId}}/install', $curr);
+        update_option('{{shortId}}/version', $curr, true);
+    }
+});
+
+/*-----------------------------------------------------------------------------
+ * Load plugin
+ ----------------------------------------------------------------------------*/
+
+if ($requirementsMet) {
+    require_once __DIR__ . '/vendor/autoload.php';
+    require_once __DIR__ . '/{{mainFile}}';
+}
