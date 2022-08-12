@@ -157,7 +157,7 @@ class Project
     protected function searchForBuild(string $name): int
     {
         foreach ($this->builds as $idx => $build) {
-            if ($build->getName() === $name) {
+            if (strtolower($build->getName()) === strtolower($name)) {
                 return $idx;
             }
         }
