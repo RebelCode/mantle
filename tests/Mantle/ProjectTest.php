@@ -224,6 +224,29 @@ class ProjectTest extends TestCase
         $this->assertSame($io, $project->getIo(), 'It should have the new IO.');
     }
 
+    public function provide_changelog_file_names(): array
+    {
+        return [
+            'changelog.md' => ['changelog.md'],
+            'CHANGELOG.md' => ['CHANGELOG.md'],
+            'CHANGELOG.MD' => ['CHANGELOG.MD'],
+            'CHANGELOG' => ['CHANGELOG'],
+        ];
+    }
+
+    /** @dataProvider provide_changelog_file_names */
+    public function test_it_should_get_the_changelog_path(string $fileName)
+    {
+        $vfs = vfsStream::setup('root', null, [
+            $fileName => '',
+        ]);
+
+        $project = new Project($vfs->url(), $this->createMock(Config::class), $this->createMock(Info::class));
+
+        $expected = $vfs->url() . '/' . $fileName;
+        $this->assertEquals($expected, $project->getChangelogPath(), 'It should get the changelog path.');
+    }
+
     public function test_it_should_construct_from_array()
     {
         $path = '/path/to/plugin';

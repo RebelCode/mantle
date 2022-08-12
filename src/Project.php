@@ -60,6 +60,26 @@ class Project
         return $this->path . '/' . $this->info->slug . '.php';
     }
 
+    /** Retrieves the path to the project's changelog file. */
+    public function getChangelogPath(): ?string
+    {
+        $searchPaths = [
+            $this->path . '/CHANGELOG.md',
+            $this->path . '/CHANGELOG.MD',
+            $this->path . '/changelog.md',
+            $this->path . '/changelog.MD',
+            $this->path . '/CHANGELOG',
+        ];
+
+        foreach ($searchPaths as $filePath) {
+            if (is_readable($filePath) && !is_dir($filePath)) {
+                return $filePath;
+            }
+        }
+
+        return null;
+    }
+
     /** Sets the project's path. */
     public function setPath(string $path): void
     {
