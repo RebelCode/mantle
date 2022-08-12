@@ -68,6 +68,16 @@ class Project
         return is_dir($path) ? $path : null;
     }
 
+    /** Retrieves the path to the plugin main file template, or null if the file does not exist. */
+    public function getMainFileTemplatePath(): ?string
+    {
+        $customPath = $this->path . '/_plugin/plugin.php.template';
+
+        return !is_readable($customPath) || is_dir($customPath)
+            ? realpath(__DIR__ . '/../templates/plugin.php.template')
+            : $customPath;
+    }
+
     /** Retrieves the path to the project's changelog file. */
     public function getChangelogPath(): ?string
     {
@@ -277,7 +287,7 @@ class Project
             new Instruction(
                 new GenerateInstructionType(),
                 [
-                    realpath(__DIR__ . '/../templates/plugin.php.template'),
+                    $this->getMainFileTemplatePath(),
                     basename($this->getMainFilePath()),
                 ],
             )

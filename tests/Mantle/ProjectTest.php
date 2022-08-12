@@ -270,6 +270,44 @@ class ProjectTest extends TestCase
         $this->assertEquals($expected, $project->getReadmeDirPath());
     }
 
+    public function provide_main_file_template_dir_structures(): array
+    {
+        return [
+            'no _plugin dir' => [
+                [],
+                null,
+            ],
+            'no custom file' => [
+                [
+                    '_plugin' => [],
+                ],
+                null,
+            ],
+            'with custom file' => [
+                [
+                    '_plugin' => [
+                        'plugin.php.template' => '',
+                    ],
+                ],
+                '_plugin/plugin.php.template',
+            ],
+        ];
+    }
+
+    /** @dataProvider provide_main_file_template_dir_structures */
+    public function test_it_should_get_the_main_file_template_path(array $dirStructure, $expected)
+    {
+        $vfs = vfsStream::setup('root', null, $dirStructure);
+
+        $project = new Project($vfs->url(), $this->createMock(Config::class), $this->createMock(Info::class));
+
+        $expected = $expected === null
+            ? realpath(__DIR__ . '/../../templates/plugin.php.template')
+            : $vfs->url() . '/' . $expected;
+
+        $this->assertEquals($expected, $project->getMainFileTemplatePath());
+    }
+
     public function provide_changelog_file_names(): array
     {
         return [
