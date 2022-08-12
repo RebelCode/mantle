@@ -4,6 +4,7 @@ namespace RebelCode\Mantle;
 
 use InvalidArgumentException;
 use RebelCode\Mantle\InstructionType\GenerateInstructionType;
+use RebelCode\Mantle\InstructionType\ReadmeInstructionType;
 use RebelCode\Mantle\Project\Build;
 use RebelCode\Mantle\Project\Config;
 use RebelCode\Mantle\Project\Info;
@@ -58,6 +59,13 @@ class Project
     public function getMainFilePath(): string
     {
         return $this->path . '/' . $this->info->slug . '.php';
+    }
+
+    /** Retrieves the path to the directory that contains the readme files, or null if the directory does not exist. */
+    public function getReadmeDirPath(): ?string
+    {
+        $path = $this->path . '/_plugin/readme';
+        return is_dir($path) ? $path : null;
     }
 
     /** Retrieves the path to the project's changelog file. */
@@ -265,15 +273,21 @@ class Project
     /** Retrieves the step that runs before any build to perform Mantle's built-in instructions. */
     public function getPreBuild(): Step
     {
-        $genMainFile = new Instruction(
-            new GenerateInstructionType(),
-            [
-                realpath(__DIR__ . '/../templates/plugin.php.template'),
-                basename($this->getMainFilePath()),
-            ]
-        );
+        $instructions = [
+            new Instruction(
+                new GenerateInstructionType(),
+                [
+                    realpath(__DIR__ . '/../templates/plugin.php.template'),
+                    basename($this->getMainFilePath()),
+                ],
+            )
+        ];
 
-        return new Step('Generating plugin files', [$genMainFile]);
+        if ($this->info->wpOrg !== null) {
+            $instructions[] = new Instruction(new ReadmeInstructionType(), []);
+        }
+
+        return new Step('Generating plugin files', $instructions);
     }
 
     /**

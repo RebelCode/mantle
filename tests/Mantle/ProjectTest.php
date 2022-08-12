@@ -224,6 +224,52 @@ class ProjectTest extends TestCase
         $this->assertSame($io, $project->getIo(), 'It should have the new IO.');
     }
 
+    public function provide_readme_dir_structures(): array
+    {
+        return [
+            'no readme dir' => [
+                [
+                    '_plugin' => [],
+                ],
+                null,
+            ],
+            'no _plugin dir' => [
+                [],
+                null,
+            ],
+            'path is a file' => [
+                [
+                    '_plugin' => [
+                        'readme' => '',
+                    ],
+                ],
+                null,
+            ],
+            'with readme dir' => [
+                [
+                    '_plugin' => [
+                        'readme' => [],
+                    ],
+                ],
+                '_plugin/readme',
+            ],
+        ];
+    }
+
+    /** @dataProvider provide_readme_dir_structures */
+    public function test_it_should_get_the_readme_dir_path(array $dirStructure, $expected)
+    {
+        $vfs = vfsStream::setup('root', null, $dirStructure);
+
+        $project = new Project($vfs->url(), $this->createMock(Config::class), $this->createMock(Info::class));
+
+        $expected = is_string($expected)
+            ? $vfs->url() . '/' . $expected
+            : $expected;
+
+        $this->assertEquals($expected, $project->getReadmeDirPath());
+    }
+
     public function provide_changelog_file_names(): array
     {
         return [
