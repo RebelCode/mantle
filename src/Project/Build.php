@@ -246,29 +246,44 @@ class Build
     protected function getMetaTokenMap(): array
     {
         if ($this->tokenMap === null) {
-            $this->tokenMap = [];
-
-            $data = array_merge($this->info->toArray(), [
-                'time' => time(),
-                'unique' => uniqid(),
-                'build' => $this->name,
-            ]);
-
-            foreach ($data as $key => $value) {
-                if (is_array($value)) {
-                    $this->tokenMap['@{{' . $key . '}}'] = implode(', ', $value);
-                    continue;
-                }
-
-                if (is_bool($value)) {
-                    $this->tokenMap['\'!{{' . $key . '}}\''] = $value ? 'true' : 'false';
-                }
-
-                $this->tokenMap['{{' . $key . '}}'] = (string) $value;
-            }
+            $this->tokenMap = self::buildTokenMap(
+                array_merge($this->info->toArray(), [
+                    'time' => time(),
+                    'unique' => uniqid(),
+                    'build' => $this->name,
+                ])
+            );
         }
 
         return $this->tokenMap;
+    }
+
+    /**
+     * Builds the token map.
+     *
+     * @param array $array The array to use to build the token map.
+     * @param string $prefix The prefix to use for array keys for nested arrays.
+     */
+    public static function buildTokenMap(array $array, string $prefix = ''): array
+    {
+        $map = [];
+
+        foreach ($array as $key => $value) {
+            if (is_object($value)) {
+                $value = (array) $value;
+            }
+
+            $key = $prefix . $key;
+
+            if (is_array($value)) {
+                $map = array_merge($map, static::buildTokenMap($value, "$key."));
+            } else {
+                $map['{{' . $key . '}}'] = (string) $value;
+                $map['\'!{{' . $key . '}}\''] = $value ? 'true' : 'false';
+            }
+        }
+
+        return $map;
     }
 
     /**
