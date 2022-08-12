@@ -32,7 +32,10 @@ class InitCommand extends Command
         $path = $input->getOption('path');
         $jsonPath = $path ? realpath($path) : './build.json';
 
-        $name = $io->ask('Project name', dirname(realpath($jsonPath)));
+        $dirName = basename(dirname(realpath($jsonPath)));
+        $projectName = implode(' ', array_map('ucfirst', preg_split('/[-_]/', $dirName)));
+
+        $name = $io->ask('Project name', $projectName);
         $version = $io->ask('Version', '0.1');
         $mainFile = $io->ask('Path to main file', 'includes/main.php');
 
