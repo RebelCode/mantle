@@ -82,7 +82,7 @@ class Readme
     /** Renders the readme. */
     public function render(Project $project): string
     {
-        $wpOrgInfo = $project->getInfo()->wpOrgInfo;
+        $wpOrgInfo = $project->getInfo()->wpOrg;
 
         if ($wpOrgInfo === null) {
             throw new RuntimeException('The project has no WordPress.org plugin information.');

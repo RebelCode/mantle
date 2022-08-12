@@ -37,7 +37,7 @@ class Info
     /** @var string|null */
     public $license = null;
     /** @var WpOrgInfo */
-    public $wpOrgInfo = null;
+    public $wpOrg = null;
 
     /**
      * Constructor.
@@ -68,7 +68,7 @@ class Info
         $info = new self($data['name'], $data['version'], $data['mainFile']);
 
         if (array_key_exists('wpOrg', $data)) {
-            $info->wpOrgInfo = WpOrgInfo::fromArray($data['wpOrg']);
+            $info->wpOrg = WpOrgInfo::fromArray($data['wpOrg']);
             unset($data['wpOrg']);
         }
 

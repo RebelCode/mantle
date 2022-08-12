@@ -32,7 +32,7 @@ class InfoTest extends TestCase
         $this->assertNull($info->minWpVer);
         $this->assertNull($info->minPhpVer);
         $this->assertNull($info->license);
-        $this->assertNull($info->wpOrgInfo);
+        $this->assertNull($info->wpOrg);
     }
 
     public function test_it_should_construct_from_array()
@@ -77,11 +77,11 @@ class InfoTest extends TestCase
         $this->assertSame($array['minWpVer'], $info->minWpVer);
         $this->assertSame($array['minPhpVer'], $info->minPhpVer);
 
-        $this->assertInstanceOf(WpOrgInfo::class, $info->wpOrgInfo);
-        $this->assertEquals($array['wpOrg']['slug'], $info->wpOrgInfo->slug);
-        $this->assertEquals($array['wpOrg']['testedUpTo'], $info->wpOrgInfo->testedUpTo);
-        $this->assertEquals($array['wpOrg']['tags'], $info->wpOrgInfo->tags);
-        $this->assertEquals($array['wpOrg']['contributors'], $info->wpOrgInfo->contributors);
+        $this->assertInstanceOf(WpOrgInfo::class, $info->wpOrg);
+        $this->assertEquals($array['wpOrg']['slug'], $info->wpOrg->slug);
+        $this->assertEquals($array['wpOrg']['testedUpTo'], $info->wpOrg->testedUpTo);
+        $this->assertEquals($array['wpOrg']['tags'], $info->wpOrg->tags);
+        $this->assertEquals($array['wpOrg']['contributors'], $info->wpOrg->contributors);
     }
 
     public function test_it_should_throw_if_array_is_missing_the_name()
