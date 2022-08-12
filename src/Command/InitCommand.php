@@ -51,6 +51,19 @@ class InitCommand extends Command
         $info->minWpVer = $io->ask('Minimum WordPress version');
         $info->minPhpVer = $io->ask('Minimum PHP version');
 
+        if ($io->confirm('Do you want to generate a WordPress.org readme file?')) {
+            $info->wpOrg = new Project\WpOrgInfo();
+            $info->wpOrg->name = $io->ask('Plugin name', $info->name);
+            $info->wpOrg->slug = $io->ask('Plugin URL slug', Project\Info::generateSlug($info->wpOrg->name));
+            $info->wpOrg->testedUpTo = $io->ask('Latest tested WP version');
+
+            $tags = $io->ask('Tags (separate by a comma)');
+            $contributors = $io->ask('Contributors (separate by a comma)');
+
+            $info->wpOrg->tags = array_map('trim', explode(',', $tags));
+            $info->wpOrg->contributors = array_map('trim', explode(',', $contributors));
+        }
+
         $io->confirm('Do you want to add source files or directories?');
 
         $sources = [];
