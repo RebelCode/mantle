@@ -45,11 +45,11 @@ abstract class BaseCommand extends Command
 
         // Get path to mantle.json file
         $inputPath = $input->getOption('path');
-        $jsonPath = $inputPath ? realpath($inputPath) : './mantle.json';
+        $jsonPath = $inputPath ?: './mantle.json';
 
         // If the file doesn't exist, throw an error
-        if (empty($jsonPath) || !file_exists($jsonPath)) {
-            $io->error("Cannot find mantle.json file at \"{$inputPath}\"");
+        if (empty($jsonPath) || !is_readable($jsonPath)) {
+            $io->error("Cannot open file at \"{$jsonPath}\"");
             return 1;
         }
 
