@@ -416,10 +416,10 @@ class ProjectTest extends TestCase
 JSON;
 
         $vfs = vfsStream::setup('root', null, [
-            'build.json' => $json,
+            'mantle.json' => $json,
         ]);
 
-        $project = Project::fromJsonFile($vfs->url() . '/build.json');
+        $project = Project::fromJsonFile($vfs->url() . '/mantle.json');
 
         $info = Project\Info::fromArray([
             'name' => 'Mantle',

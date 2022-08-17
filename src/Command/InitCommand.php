@@ -21,7 +21,7 @@ class InitCommand extends Command
             'path',
             'p',
             InputOption::VALUE_OPTIONAL,
-            'Specify the path to the build.json file.'
+            'Specify the path to the mantle.json file.'
         );
     }
 
@@ -30,7 +30,7 @@ class InitCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $path = $input->getOption('path');
-        $jsonPath = $path ? realpath($path) : './build.json';
+        $jsonPath = $path ? realpath($path) : './mantle.json';
 
         $dirName = basename(dirname(realpath($jsonPath)));
         $projectName = implode(' ', array_map('ucfirst', preg_split('/[-_]/', $dirName)));
@@ -105,7 +105,7 @@ class InitCommand extends Command
         }
     }
 
-    /** Confirms with the user whether the build.json file should be created. */
+    /** Confirms with the user whether the mantle.json file should be created. */
     protected function confirmCreateFile(OutputStyle $io, string $contents, string $path): bool
     {
         $io->newLine();

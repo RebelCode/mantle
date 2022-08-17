@@ -27,7 +27,7 @@ abstract class BaseCommand extends Command
             'path',
             'p',
             InputOption::VALUE_OPTIONAL,
-            'Specify the path to the build.json file.'
+            'Specify the path to the mantle.json file.'
         );
 
         $this->addOption(
@@ -43,13 +43,13 @@ abstract class BaseCommand extends Command
     {
         $io = new MantleOutputStyle($input, $output);
 
-        // Get path to build.json file
+        // Get path to mantle.json file
         $inputPath = $input->getOption('path');
-        $jsonPath = $inputPath ? realpath($inputPath) : './build.json';
+        $jsonPath = $inputPath ? realpath($inputPath) : './mantle.json';
 
         // If the file doesn't exist, throw an error
         if (empty($jsonPath) || !file_exists($jsonPath)) {
-            $io->error("Cannot find build.json file at \"{$inputPath}\"");
+            $io->error("Cannot find mantle.json file at \"{$inputPath}\"");
             return 1;
         }
 
