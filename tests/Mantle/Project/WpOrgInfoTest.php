@@ -35,6 +35,7 @@ class WpOrgInfoTest extends TestCase
             'tags' => ['tag1', 'tag2'],
             'contributors' => ['contributor1', 'contributor2'],
             'svn' => [
+                'build' => 'my_build',
                 'trunkCommitMessage' => 'Test commit message',
                 'tagCommitMessage' => 'Test commit message',
                 'autoStableTag' => false,
@@ -50,6 +51,7 @@ class WpOrgInfoTest extends TestCase
         $this->assertSame($array['tags'], $info->tags);
         $this->assertSame($array['contributors'], $info->contributors);
         $this->assertInstanceOf(SvnConfig::class, $info->svn);
+        $this->assertSame($array['svn']['build'], $info->svn->build);
         $this->assertEquals($array['svn']['trunkCommitMessage'], $info->svn->trunkCommitMessage);
         $this->assertEquals($array['svn']['tagCommitMessage'], $info->svn->tagCommitMessage);
         $this->assertEquals($array['svn']['autoStableTag'], $info->svn->autoStableTag);
