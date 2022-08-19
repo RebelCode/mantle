@@ -15,7 +15,7 @@ class ConfigTest extends TestCase
     public function test_it_should_construct()
     {
         $array = [
-            'tempDir' => './build',
+            'buildDir' => './build',
             'keepTempDir' => true,
             'zipFile' => 'my-plugin.zip',
             'devBuild' => 'my-build',
@@ -29,7 +29,7 @@ class ConfigTest extends TestCase
 
         $config = new Config($array);
 
-        $this->assertSame('./build', $config->tempDir);
+        $this->assertSame('./build', $config->buildDir);
         $this->assertTrue($config->keepTempDir);
         $this->assertSame('my-plugin.zip', $config->zipFileTemplate);
         $this->assertSame('my-build', $config->devBuildName);
@@ -43,18 +43,18 @@ class ConfigTest extends TestCase
 
     public function test_it_should_strip_trailing_slash_in_temp_dir()
     {
-        $array = ['tempDir' => './temp/custom-dir/',];
+        $array = ['buildDir' => './temp/custom-dir/',];
 
         $config = new Config($array);
 
-        $this->assertSame('./temp/custom-dir', $config->tempDir);
+        $this->assertSame('./temp/custom-dir', $config->buildDir);
     }
 
     public function test_it_should_create_with_defaults()
     {
         $config = new Config();
 
-        $this->assertEquals(sys_get_temp_dir(), $config->tempDir);
+        $this->assertEquals(sys_get_temp_dir(), $config->buildDir);
         $this->assertFalse($config->keepTempDir);
         $this->assertSame('{{slug}}-{{version}}-{{build}}.zip', $config->zipFileTemplate);
         $this->assertArrayHasKey('add', $config->instructionTypes);

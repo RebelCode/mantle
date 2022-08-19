@@ -21,7 +21,7 @@ class RemoveInstructionType implements InstructionType
         $project = $build->getProject();
 
         foreach ($args as $file) {
-            $fullPath = $project->getConfig()->tempDir . '/' . $file;
+            $fullPath = $project->getConfig()->buildDir . '/' . $file;
 
             if (!file_exists($fullPath)) {
                 throw new RuntimeException("File $fullPath does not exist");

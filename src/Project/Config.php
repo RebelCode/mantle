@@ -13,7 +13,7 @@ use RebelCode\Mantle\Svn\SvnConfig;
 class Config
 {
     /** @var string */
-    public $tempDir;
+    public $buildDir;
     /** @var bool */
     public $keepTempDir;
     /** @var string */
@@ -28,7 +28,7 @@ class Config
     /** Constructor. */
     public function __construct(array $data = [])
     {
-        $this->tempDir = rtrim($data['tempDir'] ?? sys_get_temp_dir(), '\\/');
+        $this->buildDir = rtrim($data['buildDir'] ?? sys_get_temp_dir(), '\\/');
         $this->keepTempDir = $data['keepTempDir'] ?? false;
         $this->zipFileTemplate = $data['zipFile'] ?? '{{slug}}-{{version}}-{{build}}.zip';
         $this->devBuildName = $data['devBuild'] ?? null;
@@ -42,9 +42,9 @@ class Config
     }
 
     /** Retrieves the path to the temporary build files directory. */
-    public function getTempDir(): string
+    public function getBuildDir(): string
     {
-        return $this->tempDir;
+        return $this->buildDir;
     }
 
     /** Retrieves the name of the build to use by default for development. */

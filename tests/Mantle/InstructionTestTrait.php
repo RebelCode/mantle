@@ -12,18 +12,18 @@ trait InstructionTestTrait
 {
     /**
      * @param array $projectDir
-     * @param array $tempDir
+     * @param array $buildDir
      * @return array{0: Project, 1: vfsStreamDirectory}
      */
-    public function createMockProject(array $projectDir = [], array $tempDir = []): array
+    public function createMockProject(array $projectDir = [], array $buildDir = []): array
     {
         $vfs = vfsStream::setup('root', null, [
             'project' => $projectDir,
-            'tmp' => $tempDir,
+            'tmp' => $buildDir,
         ]);
 
         $config = $this->createMock(Project\Config::class);
-        $config->tempDir = $vfs->url() . '/tmp';
+        $config->buildDir = $vfs->url() . '/tmp';
 
         $project = new Project(
             $vfs->url() . '/project',

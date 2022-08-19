@@ -3,7 +3,6 @@
 namespace RebelCode\Mantle\InstructionType;
 
 use InvalidArgumentException;
-use PharIo\Version\NoBuildMetaDataException;
 use RebelCode\Mantle\InstructionType;
 use RebelCode\Mantle\Project;
 use RuntimeException;
@@ -32,7 +31,7 @@ class GenerateInstructionType implements InstructionType
             ? $templateFile
             : $project->getPath() . '/' . $templateFile;
 
-        $outPath = $project->getConfig()->tempDir . '/' . $outputFile;
+        $outPath = $project->getConfig()->buildDir . '/' . $outputFile;
 
         if (!file_exists($inPath)) {
             throw new RuntimeException("Template file does not exist: {$inPath}");

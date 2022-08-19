@@ -206,12 +206,12 @@ class Project
     /** Cleans the project before a build. */
     public function clean(): void
     {
-        if (file_exists($this->config->tempDir)) {
+        if (file_exists($this->config->buildDir)) {
             if ($this->io->isVeryVerbose()) {
                 $this->io->topLevel('Cleaning project');
             }
 
-            Utils::rmDirRecursive($this->config->tempDir);
+            Utils::rmDirRecursive($this->config->buildDir);
         }
 
         $mainFile = $this->getMainFilePath();
@@ -228,7 +228,7 @@ class Project
             throw new InvalidArgumentException("Build \"{$buildName}\" is not defined in this project");
         }
 
-        Utils::ensurePathExists($this->config->tempDir);
+        Utils::ensurePathExists($this->config->buildDir);
 
         $this->io->topLevel("Preparing <fg=cyan>{$build->getName()}</>");
         $this->getPreBuild()->run($build);
@@ -245,7 +245,7 @@ class Project
 
         // Create the zip file from the temp directory
         $zipFilePath = $this->path . '/' . $build->getZipFileName();
-        $zipInputPath = $this->config->tempDir;
+        $zipInputPath = $this->config->buildDir;
         $zipInternalFolder = $this->info->slug . '/';
         Utils::zipDirectory($zipFilePath, $zipInputPath, $zipInternalFolder);
 
@@ -259,7 +259,7 @@ class Project
         // This is done to generate files in the project's directory, rather than in the temp directory.
         $project = clone $this;
         $project->config = clone $this->config;
-        $project->config->tempDir = $this->path;
+        $project->config->buildDir = $this->path;
 
         // Create a dev variant of each build, with no steps, using the original build's info.
         foreach ($project->builds as $ogBuild) {
@@ -286,7 +286,7 @@ class Project
                     $this->getMainFileTemplatePath(),
                     basename($this->getMainFilePath()),
                 ],
-            )
+            ),
         ];
 
         if ($this->info->wpOrg !== null) {

@@ -12,7 +12,7 @@ class ReadmeInstructionType implements InstructionType
     {
         $project = $build->getProject();
 
-        $outPath = $project->getConfig()->tempDir . '/readme.txt';
+        $outPath = $project->getConfig()->buildDir . '/readme.txt';
         $readme = Project\Readme::fromFilesInDir($project->getReadmeDirPath());
 
         file_put_contents($outPath, $readme->render($project));

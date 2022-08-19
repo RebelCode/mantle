@@ -341,7 +341,7 @@ class ProjectTest extends TestCase
                 'mainFile' => 'my-plugin.php',
             ],
             'config' => [
-                'tempDir' => '/tmp/my-plugin',
+                'buildDir' => '/tmp/my-plugin',
                 'zipFile' => 'my-plugin.zip',
             ],
             'builds' => [
@@ -356,7 +356,7 @@ class ProjectTest extends TestCase
         $this->assertEquals($data['info']['name'], $project->getInfo()->name);
         $this->assertEquals($data['info']['version'], $project->getInfo()->version);
         $this->assertEquals($data['info']['mainFile'], $project->getInfo()->mainFile);
-        $this->assertEquals($data['config']['tempDir'], $project->getConfig()->tempDir);
+        $this->assertEquals($data['config']['buildDir'], $project->getConfig()->buildDir);
         $this->assertEquals($data['config']['zipFile'], $project->getConfig()->zipFileTemplate);
         $this->assertCount(2, $project->getBuilds());
     }
@@ -380,7 +380,7 @@ class ProjectTest extends TestCase
                         "minPhpVer": "7.1"
                     },
                     "config": {
-                        "tempDir": "./tmp/custom-dir",
+                        "buildDir": "./tmp/custom-dir",
                         "keepTempDir": true,
                         "zipFile": "build-{{version}}.zip"
                     },
@@ -436,7 +436,7 @@ JSON;
         ]);
 
         $config = new Project\Config([
-            'tempDir' => './tmp/custom-dir',
+            'buildDir' => './tmp/custom-dir',
             'keepTempDir' => true,
             'zipFile' => 'build-{{version}}.zip',
         ]);
@@ -503,7 +503,7 @@ JSON;
 
         $this->assertEquals(
             $project->getPath(),
-            $devProject->getConfig()->tempDir,
+            $devProject->getConfig()->buildDir,
             'The new temp dir should be the same as the project path.'
         );
 
@@ -531,7 +531,7 @@ JSON;
     public function test_it_should_get_the_pre_build_step()
     {
         $path = './path/to/my-plugin';
-        $config = new Config(['tempDir' => '/tmp/my-plugin']);
+        $config = new Config(['buildDir' => '/tmp/my-plugin']);
         $info = new Info('My Test Plugin', '1.2.3', 'includes/main.php');
         $info->slug = 'my-test-plugin';
 
@@ -562,20 +562,20 @@ JSON;
     public function test_it_should_clean_project()
     {
         $project = new Project(MANTLE_TESTS_DIR, new Config(), new Info('', '', ''), []);
-        $project->getConfig()->tempDir = static::TEMP_DIR_PATH;
+        $project->getConfig()->buildDir = static::TEMP_DIR_PATH;
 
-        mkdir($project->getConfig()->tempDir, 0777, true);
-        file_put_contents($project->getConfig()->tempDir . '/test.txt', 'test');
+        mkdir($project->getConfig()->buildDir, 0777, true);
+        file_put_contents($project->getConfig()->buildDir . '/test.txt', 'test');
 
         $project->clean();
 
-        $this->assertDirectoryNotExists($project->getConfig()->tempDir, 'The temp dir should be removed');
+        $this->assertDirectoryNotExists($project->getConfig()->buildDir, 'The temp dir should be removed');
     }
 
     public function test_it_should_build_project()
     {
         $project = new Project(MANTLE_TESTS_DIR, new Config(), new Info('', '', ''), []);
-        $project->getConfig()->tempDir = static::TEMP_DIR_PATH;
+        $project->getConfig()->buildDir = static::TEMP_DIR_PATH;
         $project->getInfo()->slug = 'test';
 
         $build = $this->createTestProxy(Build::class, ['test', $project]);
@@ -589,7 +589,7 @@ JSON;
     {
         $project = new Project(dirname(static::ZIP_FILE_PATH), new Config(), new Info('', '', ''), []);
         $project->getConfig()->zipFileTemplate = 'build.zip';
-        $project->getConfig()->tempDir = MANTLE_TESTS_DIR . '/sample';
+        $project->getConfig()->buildDir = MANTLE_TESTS_DIR . '/sample';
         $project->getInfo()->slug = 'test';
         $project->addBuild(new Build('test', $project));
         $project->zip('test');

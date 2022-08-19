@@ -22,7 +22,7 @@ class AddInstructionType implements InstructionType
 
         foreach ($args as $file) {
             $srcFile = $project->getPath() . '/' . $file;
-            $destFile = $project->getConfig()->tempDir . '/' . $file;
+            $destFile = $project->getConfig()->buildDir . '/' . $file;
 
             if (!file_exists($srcFile)) {
                 throw new RuntimeException("File $srcFile does not exist");
