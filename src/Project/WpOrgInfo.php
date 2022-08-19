@@ -40,6 +40,12 @@ class WpOrgInfo
         $this->contributors = $contributors;
     }
 
+    /** Retrieves the URL of the plugin's page on WordPress.org. */
+    public function getUrl(): string
+    {
+        return "https://wordpress.org/plugins/{$this->slug}/";
+    }
+
     /** Creates an instance from an array. */
     public static function fromArray(array $data): self
     {
