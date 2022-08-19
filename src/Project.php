@@ -228,11 +228,7 @@ class Project
             throw new InvalidArgumentException("Build \"{$buildName}\" is not defined in this project");
         }
 
-        if (!file_exists($this->config->tempDir)) {
-            mkdir($this->config->tempDir, 0777, true);
-        } elseif (!is_dir($this->config->tempDir)) {
-            throw new RuntimeException("Temp directory \"{$this->config->tempDir}\" is not a directory");
-        }
+        Utils::ensurePathExists($this->config->tempDir);
 
         $this->io->topLevel("Preparing <fg=cyan>{$build->getName()}</>");
         $this->getPreBuild()->run($build);
