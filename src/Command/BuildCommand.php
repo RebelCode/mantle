@@ -2,14 +2,10 @@
 
 namespace RebelCode\Mantle\Command;
 
+use RebelCode\Mantle\MantleOutputStyle;
 use RebelCode\Mantle\Project;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\OutputStyle;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 class BuildCommand extends BaseCommand
 {
@@ -27,7 +23,7 @@ class BuildCommand extends BaseCommand
     }
 
     /** @inheritDoc */
-    protected function runCommand(Project $project, OutputStyle $io, InputInterface $input): int
+    protected function runCommand(Project $project, MantleOutputStyle $io, InputInterface $input): int
     {
         // If no builds were specified, run all.
         $builds = $input->getArgument('builds') ?? [];

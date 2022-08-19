@@ -8,7 +8,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\OutputStyle;
 
 abstract class BaseCommand extends Command
 {
@@ -16,7 +15,7 @@ abstract class BaseCommand extends Command
     abstract protected function setup(): void;
 
     /** Runs the command. */
-    abstract protected function runCommand(Project $project, OutputStyle $io, InputInterface $input): int;
+    abstract protected function runCommand(Project $project, MantleOutputStyle $io, InputInterface $input): int;
 
     /** @inheritDoc */
     protected function configure()
