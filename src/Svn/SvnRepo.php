@@ -156,52 +156,40 @@ class SvnRepo
     /** Executes an SVN command. */
     protected function execute(string $command, string $relPath = '', bool $passThru = false): string
     {
-        $fullCommand = "svn $command";
+        $cwd = Utils::path([$this->directory, $relPath]);
+        $descriptors = [
+            0 => $passThru ? STDIN : ['pipe', 'r'],
+            1 => $passThru ? STDOUT : ['pipe', 'w'],
+            2 => $passThru ? STDERR : ['pipe', 'w'],
+        ];
 
-        $output = '';
-        $error = '';
-        $code = 1;
+        $proc = proc_open("svn $command", $descriptors, $pipes, $cwd);
 
-        if ($passThru) {
-            // Change current directory to the local working copy
-            $cwd = getcwd();
-            chdir($this->directory);
-            // Run the command in pass-through mode
-            $result = passthru($fullCommand, $code);
-            // Change current directory back to what it was before
-            chdir($cwd);
-
-            if ($result === false) {
-                throw new RuntimeException('Could not run "svn" command. Is SVN installed?');
-            }
-        } else {
-            $proc = proc_open($fullCommand, [
-                0 => ['pipe', 'r'],
-                1 => ['pipe', 'w'],
-                2 => ['pipe', 'w'],
-            ], $pipes, Utils::path([$this->directory, $relPath]));
-
-            if (is_resource($proc)) {
+        if (is_resource($proc)) {
+            if (!$passThru) {
                 $output = stream_get_contents($pipes[1]);
                 $error = stream_get_contents($pipes[2]);
+
+                $output = $output ? trim($output) : '';
+                $error = $error ? trim($error) : '';
+
                 array_map('fclose', $pipes);
-
-                $code = proc_close($proc);
             } else {
-                throw new RuntimeException('Could not run "svn" command. Is SVN installed?');
+                $output = '';
+                $error = '';
             }
-        }
 
-        if ($code === 0) {
-            return $output;
+            $code = proc_close($proc);
+
+            if ($code === 0) {
+                return $output;
+            } else {
+                $hasStdErr = strlen($error) > 0;
+                $message = 'SVN exited with code ' . $code . ($hasStdErr ? ":  $error" : '');
+                throw new RuntimeException($message);
+            }
         } else {
-            $message = 'SVN exited with code ' . $code;
-
-            if (strlen(trim($error)) > 0) {
-                $message .= ' and the following error: ' . $error;
-            }
-
-            throw new RuntimeException($message);
+            throw new RuntimeException('Could not run "svn" command. Is SVN installed?');
         }
     }
 }
