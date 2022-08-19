@@ -122,7 +122,7 @@ class SvnRepo
     public function commit(string $message)
     {
         $message = escapeshellarg($message);
-        $this->execute("commit -m '{$message}' --force-interactive", '', true);
+        $this->execute("commit -m {$message} --force-interactive", '', true);
     }
 
     /** Creates a new tag from the trunk. */
