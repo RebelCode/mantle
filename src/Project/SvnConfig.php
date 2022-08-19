@@ -41,6 +41,18 @@ class SvnConfig
         $this->checkoutDir = $checkoutDir;
     }
 
+    /** Retrieves the trunk commit message, with any placeholders replaced. */
+    public function getTrunkCommitMsg(Build $build): string
+    {
+        return $build->interpolate($this->trunkCommitMessage);
+    }
+
+    /** Retrieves the tag commit message, with any placeholders replaced.  */
+    public function getTagCommitMsg(Build $build): string
+    {
+        return $build->interpolate($this->tagCommitMessage);
+    }
+
     /**
      * Creates an instance from an array.
      *
