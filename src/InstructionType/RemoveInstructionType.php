@@ -4,6 +4,7 @@ namespace RebelCode\Mantle\InstructionType;
 
 use InvalidArgumentException;
 use RebelCode\Mantle\InstructionType;
+use RebelCode\Mantle\MantleOutputStyle;
 use RebelCode\Mantle\Project;
 use RebelCode\Mantle\Utils;
 use RuntimeException;
@@ -12,7 +13,7 @@ use RuntimeException;
 class RemoveInstructionType implements InstructionType
 {
     /** @inheritDoc */
-    public function run(Project\Build $build, array $args): void
+    public function run(Project\Build $build, array $args, MantleOutputStyle $io): void
     {
         if (count($args) === 0) {
             throw new InvalidArgumentException('Missing argument for "REMOVE" instruction');
@@ -35,7 +36,7 @@ class RemoveInstructionType implements InstructionType
                 unlink($fullPath);
             }
 
-            $project->getIo()->writeInstruction('bright-red', 'Removed %s', $fullPath);
+            $io->writeInstruction('bright-red', 'Removed %s', $fullPath);
         }
     }
 }

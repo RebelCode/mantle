@@ -4,6 +4,7 @@ namespace RebelCode\Mantle\InstructionType;
 
 use InvalidArgumentException;
 use RebelCode\Mantle\InstructionType;
+use RebelCode\Mantle\MantleOutputStyle;
 use RebelCode\Mantle\Project;
 use RebelCode\Mantle\Utils;
 use RuntimeException;
@@ -12,7 +13,7 @@ use RuntimeException;
 class AddInstructionType implements InstructionType
 {
     /** @inheritDoc */
-    public function run(Project\Build $build, array $args): void
+    public function run(Project\Build $build, array $args, MantleOutputStyle $io): void
     {
         if (count($args) === 0) {
             throw new InvalidArgumentException('Missing argument for "ADD" instruction');
@@ -36,7 +37,7 @@ class AddInstructionType implements InstructionType
                 Utils::copyFile($srcFile, $destFile);
             }
 
-            $project->getIo()->writeInstruction('green', 'Copied %s -> %s', $srcFile, $destFile);
+            $io->writeInstruction('green', 'Copied %s -> %s', $srcFile, $destFile);
         }
     }
 }

@@ -4,6 +4,7 @@ namespace RebelCode\Mantle\InstructionType;
 
 use InvalidArgumentException;
 use RebelCode\Mantle\InstructionType;
+use RebelCode\Mantle\MantleOutputStyle;
 use RebelCode\Mantle\Project;
 use RuntimeException;
 
@@ -11,7 +12,7 @@ use RuntimeException;
 class RunInstructionType implements InstructionType
 {
     /** @inheritDoc */
-    public function run(Project\Build $build, array $args): void
+    public function run(Project\Build $build, array $args, MantleOutputStyle $io): void
     {
         $numArgs = count($args);
 
@@ -31,7 +32,6 @@ class RunInstructionType implements InstructionType
             chdir($cwd);
         }
 
-        $io = $build->getProject()->getIo();
         $io->writeInstruction('yellow', 'Running %s', $command);
 
         if ($io->isVerbose()) {

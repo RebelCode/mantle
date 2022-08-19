@@ -37,6 +37,6 @@ class Instruction
     /** Runs the instruction. */
     public function run(Build $build)
     {
-        $this->type->run($build, $this->args);
+        $this->type->run($build, $this->args, $build->getProject()->getIo());
     }
 }

@@ -4,13 +4,14 @@ namespace RebelCode\Mantle\InstructionType;
 
 use InvalidArgumentException;
 use RebelCode\Mantle\InstructionType;
+use RebelCode\Mantle\MantleOutputStyle;
 use RebelCode\Mantle\Project;
 use RuntimeException;
 
 /** Instructions that generate files and add them to the build. */
 class GenerateInstructionType implements InstructionType
 {
-    public function run(Project\Build $build, array $args): void
+    public function run(Project\Build $build, array $args, MantleOutputStyle $io): void
     {
         $numArgs = count($args);
 
@@ -44,7 +45,7 @@ class GenerateInstructionType implements InstructionType
             $newContent = $build->interpolate($template);
             file_put_contents($outPath, $newContent);
 
-            $project->getIo()->writeInstruction('magenta', 'Generated %s', $outPath);
+            $io->writeInstruction('magenta', 'Generated %s', $outPath);
         }
     }
 }
