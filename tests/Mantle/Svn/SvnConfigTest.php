@@ -12,15 +12,15 @@ class SvnConfigTest extends TestCase
     public function test_it_should_set_properties()
     {
         $build = 'my_build';
-        $trunkCommitMessage = 'My trunk commit message';
-        $tagCommitMessage = 'My tag commit message';
+        $trunkCommit = 'My trunk commit message';
+        $tagCommit = 'My tag commit message';
         $checkoutDir = './svn';
 
-        $config = new SvnConfig($build, $trunkCommitMessage, $tagCommitMessage, $checkoutDir);
+        $config = new SvnConfig($build, $trunkCommit, $tagCommit, $checkoutDir);
 
         $this->assertEquals($build, $config->build);
-        $this->assertEquals($trunkCommitMessage, $config->trunkCommitMessage);
-        $this->assertEquals($tagCommitMessage, $config->tagCommitMessage);
+        $this->assertEquals($trunkCommit, $config->trunkCommit);
+        $this->assertEquals($tagCommit, $config->tagCommit);
         $this->assertEquals($checkoutDir, $config->checkoutDir);
     }
 
@@ -29,8 +29,8 @@ class SvnConfigTest extends TestCase
         $config = new SvnConfig('');
 
         $this->assertEquals('', $config->build);
-        $this->assertEquals('Update trunk to v{{version}}', $config->trunkCommitMessage);
-        $this->assertEquals('Add tag {{version}}', $config->tagCommitMessage);
+        $this->assertEquals('Update trunk to v{{version}}', $config->trunkCommit);
+        $this->assertEquals('Add tag {{version}}', $config->tagCommit);
         $this->assertNull($config->checkoutDir);
     }
 
@@ -38,16 +38,16 @@ class SvnConfigTest extends TestCase
     {
         $array = [
             'build' => 'my_build',
-            'trunkCommitMessage' => 'My trunk commit message',
-            'tagCommitMessage' => 'My tag commit message',
+            'trunkCommit' => 'My trunk commit message',
+            'tagCommit' => 'My tag commit message',
             'checkoutDir' => './svn',
         ];
 
         $config = SvnConfig::fromArray($array);
 
         $this->assertEquals($array['build'], $config->build);
-        $this->assertEquals($array['trunkCommitMessage'], $config->trunkCommitMessage);
-        $this->assertEquals($array['tagCommitMessage'], $config->tagCommitMessage);
+        $this->assertEquals($array['trunkCommit'], $config->trunkCommit);
+        $this->assertEquals($array['tagCommit'], $config->tagCommit);
         $this->assertEquals($array['checkoutDir'], $config->checkoutDir);
     }
 

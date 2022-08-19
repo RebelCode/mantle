@@ -21,8 +21,8 @@ class ConfigTest extends TestCase
             'devBuild' => 'my-build',
             'svn' => [
                 'build' => 'my_build',
-                'trunkCommitMessage' => 'Test commit message',
-                'tagCommitMessage' => 'Test commit message',
+                'trunkCommit' => 'Test commit message',
+                'tagCommit' => 'Test commit message',
                 'checkoutDir' => './.svn',
             ],
         ];
@@ -36,8 +36,8 @@ class ConfigTest extends TestCase
 
         $this->assertInstanceOf(SvnConfig::class, $config->svn);
         $this->assertSame($array['svn']['build'], $config->svn->build);
-        $this->assertEquals($array['svn']['trunkCommitMessage'], $config->svn->trunkCommitMessage);
-        $this->assertEquals($array['svn']['tagCommitMessage'], $config->svn->tagCommitMessage);
+        $this->assertEquals($array['svn']['trunkCommit'], $config->svn->trunkCommit);
+        $this->assertEquals($array['svn']['tagCommit'], $config->svn->tagCommit);
         $this->assertEquals($array['svn']['checkoutDir'], $config->svn->checkoutDir);
     }
 

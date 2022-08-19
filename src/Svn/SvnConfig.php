@@ -11,9 +11,9 @@ class SvnConfig
     /** @var string */
     public $build;
     /** @var string */
-    public $trunkCommitMessage = 'Update trunk to v{{version}}';
+    public $trunkCommit = 'Update trunk to v{{version}}';
     /** @var string */
-    public $tagCommitMessage = 'Add tag {{version}}';
+    public $tagCommit = 'Add tag {{version}}';
     /** @var string|null */
     public $checkoutDir = '.wporg';
 
@@ -21,32 +21,32 @@ class SvnConfig
      * Constructor.
      *
      * @param string $build The name of the build to be published to the WordPress.org SVN repository.
-     * @param string|null $trunkCommitMessage The commit message to use when updating the trunk.
-     * @param string|null $tagCommitMessage The commit message to use when adding a tag.
+     * @param string|null $trunkCommit The commit message to use when updating the trunk.
+     * @param string|null $tagCommit The commit message to use when adding a tag.
      * @param string|null $checkoutDir The path to the directory to use to checkout the repository.
      */
     public function __construct(
         string $build,
-        ?string $trunkCommitMessage = null,
-        ?string $tagCommitMessage = null,
+        ?string $trunkCommit = null,
+        ?string $tagCommit = null,
         ?string $checkoutDir = null
     ) {
         $this->build = $build;
-        $this->trunkCommitMessage = $trunkCommitMessage ?? $this->trunkCommitMessage;
-        $this->tagCommitMessage = $tagCommitMessage ?? $this->tagCommitMessage;
+        $this->trunkCommit = $trunkCommit ?? $this->trunkCommit;
+        $this->tagCommit = $tagCommit ?? $this->tagCommit;
         $this->checkoutDir = $checkoutDir;
     }
 
     /** Retrieves the trunk commit message, with any placeholders replaced. */
     public function getTrunkCommitMsg(Build $build): string
     {
-        return $build->interpolate($this->trunkCommitMessage);
+        return $build->interpolate($this->trunkCommit);
     }
 
     /** Retrieves the tag commit message, with any placeholders replaced.  */
     public function getTagCommitMsg(Build $build): string
     {
-        return $build->interpolate($this->tagCommitMessage);
+        return $build->interpolate($this->tagCommit);
     }
 
     /**
