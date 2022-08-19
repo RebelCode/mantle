@@ -5,6 +5,7 @@ use RebelCode\Mantle\Command\BuildCommand;
 use RebelCode\Mantle\Command\CleanCommand;
 use RebelCode\Mantle\Command\DevCommand;
 use RebelCode\Mantle\Command\InitCommand;
+use RebelCode\Mantle\Command\PublishCommand;
 use Symfony\Component\Console\Application;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -23,6 +24,7 @@ $app->add(new InitCommand());
 $app->add(new BuildCommand());
 $app->add(new DevCommand());
 $app->add(new CleanCommand());
+$app->add(new PublishCommand());
 
 try {
     $app->run();
