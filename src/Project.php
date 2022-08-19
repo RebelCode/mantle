@@ -3,8 +3,8 @@
 namespace RebelCode\Mantle;
 
 use InvalidArgumentException;
-use RebelCode\Mantle\InstructionType\GenerateInstructionType;
-use RebelCode\Mantle\InstructionType\ReadmeInstructionType;
+use RebelCode\Mantle\InstructionType\GenerateFiles;
+use RebelCode\Mantle\InstructionType\GenerateReadme;
 use RebelCode\Mantle\Project\Build;
 use RebelCode\Mantle\Project\Config;
 use RebelCode\Mantle\Project\Info;
@@ -281,7 +281,7 @@ class Project
     {
         $instructions = [
             new Instruction(
-                new GenerateInstructionType(),
+                new GenerateFiles(),
                 [
                     $this->getMainFileTemplatePath(),
                     basename($this->getMainFilePath()),
@@ -290,7 +290,7 @@ class Project
         ];
 
         if ($this->info->wpOrg !== null) {
-            $instructions[] = new Instruction(new ReadmeInstructionType(), []);
+            $instructions[] = new Instruction(new GenerateReadme(), []);
         }
 
         return new Step('Generating plugin files', $instructions);

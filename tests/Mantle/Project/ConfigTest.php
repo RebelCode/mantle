@@ -3,10 +3,10 @@
 namespace RebelCode\Mantle\Tests\Project;
 
 use PHPUnit\Framework\TestCase;
-use RebelCode\Mantle\InstructionType\AddInstructionType;
-use RebelCode\Mantle\InstructionType\GenerateInstructionType;
-use RebelCode\Mantle\InstructionType\RemoveInstructionType;
-use RebelCode\Mantle\InstructionType\RunInstructionType;
+use RebelCode\Mantle\InstructionType\AddFiles;
+use RebelCode\Mantle\InstructionType\GenerateFiles;
+use RebelCode\Mantle\InstructionType\RemoveFiles;
+use RebelCode\Mantle\InstructionType\RunCommand;
 use RebelCode\Mantle\Project\Config;
 
 class ConfigTest extends TestCase
@@ -64,7 +64,7 @@ class ConfigTest extends TestCase
         $config = new Config();
         $instruction = $config->createInstruction('add', ['foo', 'bar']);
 
-        $this->assertInstanceOf(AddInstructionType::class, $instruction->getType());
+        $this->assertInstanceOf(AddFiles::class, $instruction->getType());
         $this->assertEquals(['foo', 'bar'], $instruction->getArgs());
     }
 
@@ -73,7 +73,7 @@ class ConfigTest extends TestCase
         $config = new Config();
         $instruction = $config->createInstruction('remove', ['foo', 'bar']);
 
-        $this->assertInstanceOf(RemoveInstructionType::class, $instruction->getType());
+        $this->assertInstanceOf(RemoveFiles::class, $instruction->getType());
         $this->assertEquals(['foo', 'bar'], $instruction->getArgs());
     }
 
@@ -82,7 +82,7 @@ class ConfigTest extends TestCase
         $config = new Config();
         $instruction = $config->createInstruction('generate', ['input', 'output']);
 
-        $this->assertInstanceOf(GenerateInstructionType::class, $instruction->getType());
+        $this->assertInstanceOf(GenerateFiles::class, $instruction->getType());
         $this->assertEquals(['input', 'output'], $instruction->getArgs());
     }
 
@@ -91,7 +91,7 @@ class ConfigTest extends TestCase
         $config = new Config();
         $instruction = $config->createInstruction('run', ['do stuff']);
 
-        $this->assertInstanceOf(RunInstructionType::class, $instruction->getType());
+        $this->assertInstanceOf(RunCommand::class, $instruction->getType());
         $this->assertEquals(['do stuff'], $instruction->getArgs());
     }
 }

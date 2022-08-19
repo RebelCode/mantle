@@ -10,7 +10,7 @@ use RebelCode\Mantle\Utils;
 use RuntimeException;
 
 /** Instructions that remove files from the build. */
-class RemoveInstructionType implements InstructionType
+class RemoveFiles implements InstructionType
 {
     /** @inheritDoc */
     public function run(Project\Build $build, array $args, MantleOutputStyle $io): void

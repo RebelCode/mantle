@@ -4,7 +4,7 @@ namespace RebelCode\Mantle\Tests;
 
 use bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use RebelCode\Mantle\InstructionType\GenerateInstructionType;
+use RebelCode\Mantle\InstructionType\GenerateFiles;
 use RebelCode\Mantle\MantleOutputStyle;
 use RebelCode\Mantle\Project;
 use RebelCode\Mantle\Project\Build;
@@ -528,7 +528,7 @@ JSON;
     public function test_it_should_get_the_pre_build_step()
     {
         $path = './path/to/my-plugin';
-        $config = new Config(['buildDir' => '/tmp/my-plugin']);
+        $config = new Config();
         $info = new Info('My Test Plugin', '1.2.3', 'includes/main.php');
         $info->slug = 'my-test-plugin';
 
@@ -538,7 +538,7 @@ JSON;
         $genMainFileInst = $step->getInstructions()[0];
 
         $this->assertInstanceOf(
-            GenerateInstructionType::class,
+            GenerateFiles::class,
             $genMainFileInst->getType(),
             'The instruction type should be GenerateInstructionType'
         );

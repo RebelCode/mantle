@@ -7,7 +7,7 @@ use RebelCode\Mantle\MantleOutputStyle;
 use RebelCode\Mantle\Project;
 
 /** Internal instruction type to generate a readme.txt file for plugins that are hosted on wordpress.org */
-class ReadmeInstructionType implements InstructionType
+class GenerateReadme implements InstructionType
 {
     public function run(Project\Build $build, array $args, MantleOutputStyle $io): void
     {

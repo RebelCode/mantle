@@ -9,7 +9,7 @@ use RebelCode\Mantle\Project;
 use RuntimeException;
 
 /** Instructions that run a shell command or external program. */
-class RunInstructionType implements InstructionType
+class RunCommand implements InstructionType
 {
     /** @inheritDoc */
     public function run(Project\Build $build, array $args, MantleOutputStyle $io): void

@@ -9,7 +9,7 @@ use RebelCode\Mantle\Project;
 use RuntimeException;
 
 /** Instructions that generate files and add them to the build. */
-class GenerateInstructionType implements InstructionType
+class GenerateFiles implements InstructionType
 {
     public function run(Project\Build $build, array $args, MantleOutputStyle $io): void
     {

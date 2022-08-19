@@ -4,10 +4,11 @@ namespace RebelCode\Mantle\Tests\InstructionType;
 
 use PHPUnit\Framework\TestCase;
 use RebelCode\Mantle\InstructionType;
-use RebelCode\Mantle\InstructionType\RemoveInstructionType;
+use RebelCode\Mantle\InstructionType\RemoveFiles;
+use RebelCode\Mantle\MantleOutputStyle;
 use RebelCode\Mantle\Tests\InstructionTestTrait;
 
-class RemoveInstructionTypeTest extends TestCase
+class RemoveFilesTest extends TestCase
 {
     use InstructionTestTrait;
 
@@ -15,8 +16,8 @@ class RemoveInstructionTypeTest extends TestCase
     {
         $this->assertInstanceOf(
             InstructionType::class,
-            new RemoveInstructionType([]),
-            RemoveInstructionType::class . ' must implement ' . InstructionType::class . ' interface'
+            new RemoveFiles([]),
+            RemoveFiles::class . ' must implement ' . InstructionType::class . ' interface'
         );
     }
 
@@ -29,8 +30,10 @@ class RemoveInstructionTypeTest extends TestCase
             ]
         );
 
-        $instruction = new RemoveInstructionType();
-        $instruction->run($project->getBuild('test'), ['foo.txt']);
+        $io = $this->createMock(MantleOutputStyle::class);
+
+        $instruction = new RemoveFiles();
+        $instruction->run($project->getBuild('test'), ['foo.txt'], $io);
 
         $this->assertFileNotExists($vfs->url() . '/tmp/foo.txt');
     }
@@ -46,8 +49,10 @@ class RemoveInstructionTypeTest extends TestCase
             ]
         );
 
-        $instruction = new RemoveInstructionType();
-        $instruction->run($project->getBuild('test'), ['foo.txt', 'bar.txt', 'baz.txt']);
+        $io = $this->createMock(MantleOutputStyle::class);
+
+        $instruction = new RemoveFiles();
+        $instruction->run($project->getBuild('test'), ['foo.txt', 'bar.txt', 'baz.txt'], $io);
 
         $this->assertFileNotExists($vfs->url() . '/tmp/foo.txt');
         $this->assertFileNotExists($vfs->url() . '/tmp/bar.txt');
@@ -68,8 +73,10 @@ class RemoveInstructionTypeTest extends TestCase
             ]
         );
 
-        $instruction = new RemoveInstructionType();
-        $instruction->run($project->getBuild('test'), ['dir']);
+        $io = $this->createMock(MantleOutputStyle::class);
+
+        $instruction = new RemoveFiles();
+        $instruction->run($project->getBuild('test'), ['dir'], $io);
 
         $this->assertDirectoryNotExists($vfs->url() . '/tmp/dir');
         $this->assertDirectoryNotExists($vfs->url() . '/tmp/dir/sub');

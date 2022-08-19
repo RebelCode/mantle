@@ -4,10 +4,10 @@ namespace RebelCode\Mantle\Project;
 
 use InvalidArgumentException;
 use RebelCode\Mantle\InstructionType;
-use RebelCode\Mantle\InstructionType\AddInstructionType;
-use RebelCode\Mantle\InstructionType\GenerateInstructionType;
-use RebelCode\Mantle\InstructionType\RemoveInstructionType;
-use RebelCode\Mantle\InstructionType\RunInstructionType;
+use RebelCode\Mantle\InstructionType\AddFiles;
+use RebelCode\Mantle\InstructionType\GenerateFiles;
+use RebelCode\Mantle\InstructionType\RemoveFiles;
+use RebelCode\Mantle\InstructionType\RunCommand;
 
 class Config
 {
@@ -34,10 +34,10 @@ class Config
         $this->buildDir = sys_get_temp_dir();
         $this->devBuild = $data['devBuild'] ?? null;
         $this->instructionTypes = [
-            'add' => new AddInstructionType(),
-            'generate' => new GenerateInstructionType(),
-            'remove' => new RemoveInstructionType(),
-            'run' => new RunInstructionType(),
+            'add' => new AddFiles(),
+            'generate' => new GenerateFiles(),
+            'remove' => new RemoveFiles(),
+            'run' => new RunCommand(),
         ];
     }
 

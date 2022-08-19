@@ -4,10 +4,11 @@ namespace RebelCode\Mantle\Tests\InstructionType;
 
 use PHPUnit\Framework\TestCase;
 use RebelCode\Mantle\InstructionType;
-use RebelCode\Mantle\InstructionType\GenerateInstructionType;
+use RebelCode\Mantle\InstructionType\GenerateFiles;
+use RebelCode\Mantle\MantleOutputStyle;
 use RebelCode\Mantle\Tests\InstructionTestTrait;
 
-class GenerateInstructionTypeTest extends TestCase
+class GenerateFilesTest extends TestCase
 {
     use InstructionTestTrait;
 
@@ -15,8 +16,8 @@ class GenerateInstructionTypeTest extends TestCase
     {
         $this->assertInstanceOf(
             InstructionType::class,
-            new GenerateInstructionType(),
-            GenerateInstructionType::class . ' must implement ' . InstructionType::class . ' interface'
+            new GenerateFiles(),
+            GenerateFiles::class . ' must implement ' . InstructionType::class . ' interface'
         );
     }
 
@@ -45,8 +46,10 @@ class GenerateInstructionTypeTest extends TestCase
             * {$project->getInfo()->license}
             EXPECTED;
 
-        $instruction = new GenerateInstructionType();
-        $instruction->run($project->getBuild('test'), ['template.txt', 'generated.txt']);
+        $io = $this->createMock(MantleOutputStyle::class);
+
+        $instruction = new GenerateFiles();
+        $instruction->run($project->getBuild('test'), ['template.txt', 'generated.txt'], $io);
 
         $this->assertFileExists($vfs->url() . '/tmp/generated.txt');
         $this->assertEquals($expected, file_get_contents($vfs->url() . '/tmp/generated.txt'));
@@ -63,8 +66,10 @@ class GenerateInstructionTypeTest extends TestCase
             []
         );
 
-        $instruction = new GenerateInstructionType();
-        $instruction->run($project->getBuild('test'), ['wrong-file.txt', 'generated.txt']);
+        $io = $this->createMock(MantleOutputStyle::class);
+
+        $instruction = new GenerateFiles();
+        $instruction->run($project->getBuild('test'), ['wrong-file.txt', 'generated.txt'], $io);
     }
 
     public function test_it_should_throw_if_template_file_is_a_dir()
@@ -78,7 +83,9 @@ class GenerateInstructionTypeTest extends TestCase
             []
         );
 
-        $instruction = new GenerateInstructionType();
-        $instruction->run($project->getBuild('test'), ['template', 'generated.txt']);
+        $io = $this->createMock(MantleOutputStyle::class);
+
+        $instruction = new GenerateFiles();
+        $instruction->run($project->getBuild('test'), ['template', 'generated.txt'], $io);
     }
 }

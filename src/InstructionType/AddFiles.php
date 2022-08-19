@@ -10,7 +10,7 @@ use RebelCode\Mantle\Utils;
 use RuntimeException;
 
 /** Instructions that add files to the build. */
-class AddInstructionType implements InstructionType
+class AddFiles implements InstructionType
 {
     /** @inheritDoc */
     public function run(Project\Build $build, array $args, MantleOutputStyle $io): void

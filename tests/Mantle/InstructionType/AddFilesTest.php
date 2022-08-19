@@ -4,10 +4,11 @@ namespace RebelCode\Mantle\Tests\InstructionType;
 
 use PHPUnit\Framework\TestCase;
 use RebelCode\Mantle\InstructionType;
-use RebelCode\Mantle\InstructionType\AddInstructionType;
+use RebelCode\Mantle\InstructionType\AddFiles;
+use RebelCode\Mantle\MantleOutputStyle;
 use RebelCode\Mantle\Tests\InstructionTestTrait;
 
-class AddInstructionTypeTest extends TestCase
+class AddFilesTest extends TestCase
 {
     use InstructionTestTrait;
 
@@ -15,8 +16,8 @@ class AddInstructionTypeTest extends TestCase
     {
         $this->assertInstanceOf(
             InstructionType::class,
-            new AddInstructionType(),
-            AddInstructionType::class . ' must implement ' . InstructionType::class . ' interface'
+            new AddFiles(),
+            AddFiles::class . ' must implement ' . InstructionType::class . ' interface'
         );
     }
 
@@ -29,8 +30,10 @@ class AddInstructionTypeTest extends TestCase
             []
         );
 
-        $instruction = new AddInstructionType();
-        $instruction->run($project->getBuild('test'), ['foo.txt']);
+        $io = $this->createMock(MantleOutputStyle::class);
+
+        $instruction = new AddFiles();
+        $instruction->run($project->getBuild('test'), ['foo.txt'], $io);
 
         $this->assertFileExists($vfs->url() . '/tmp/foo.txt');
     }
@@ -46,8 +49,10 @@ class AddInstructionTypeTest extends TestCase
             []
         );
 
-        $instruction = new AddInstructionType();
-        $instruction->run($project->getBuild('test'), ['foo.txt', 'bar.txt', 'baz.txt']);
+        $io = $this->createMock(MantleOutputStyle::class);
+
+        $instruction = new AddFiles();
+        $instruction->run($project->getBuild('test'), ['foo.txt', 'bar.txt', 'baz.txt'], $io);
 
         $this->assertFileExists($vfs->url() . '/tmp/foo.txt');
         $this->assertFileExists($vfs->url() . '/tmp/bar.txt');
@@ -68,8 +73,10 @@ class AddInstructionTypeTest extends TestCase
             []
         );
 
-        $instruction = new AddInstructionType();
-        $instruction->run($project->getBuild('test'), ['dir']);
+        $io = $this->createMock(MantleOutputStyle::class);
+
+        $instruction = new AddFiles();
+        $instruction->run($project->getBuild('test'), ['dir'], $io);
 
         $this->assertFileExists($vfs->url() . '/tmp/dir/foo.txt');
         $this->assertFileExists($vfs->url() . '/tmp/dir/sub/bar.txt');

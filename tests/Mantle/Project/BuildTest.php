@@ -3,10 +3,10 @@
 namespace RebelCode\Mantle\Tests\Project;
 
 use PHPUnit\Framework\TestCase;
-use RebelCode\Mantle\InstructionType\AddInstructionType;
-use RebelCode\Mantle\InstructionType\GenerateInstructionType;
-use RebelCode\Mantle\InstructionType\RemoveInstructionType;
-use RebelCode\Mantle\InstructionType\RunInstructionType;
+use RebelCode\Mantle\InstructionType\AddFiles;
+use RebelCode\Mantle\InstructionType\GenerateFiles;
+use RebelCode\Mantle\InstructionType\RemoveFiles;
+use RebelCode\Mantle\InstructionType\RunCommand;
 use RebelCode\Mantle\Project;
 use RebelCode\Mantle\Project\Build;
 use RebelCode\Mantle\Project\Info;
@@ -23,8 +23,8 @@ class BuildTest extends TestCase
         $info = $this->createMock(Info::class);
         $env = ['FOO' => 'BAR'];
         $steps = [
-            'step-1' => $this->createMock(RunInstructionType::class),
-            'step-2' => $this->createMock(RunInstructionType::class),
+            'step-1' => $this->createMock(RunCommand::class),
+            'step-2' => $this->createMock(RunCommand::class),
         ];
 
         $build = new Build($name, $project, $inherits, $info, $env, $steps);
@@ -362,9 +362,9 @@ class BuildTest extends TestCase
         $this->assertInstanceOf(Instruction::class, $step1->getInstructions()[2]);
         $this->assertInstanceOf(Instruction::class, $step2->getInstructions()[0]);
 
-        $this->assertInstanceOf(AddInstructionType::class, $step1->getInstructions()[0]->getType());
-        $this->assertInstanceOf(GenerateInstructionType::class, $step1->getInstructions()[1]->getType());
-        $this->assertInstanceOf(RemoveInstructionType::class, $step1->getInstructions()[2]->getType());
-        $this->assertInstanceOf(RunInstructionType::class, $step2->getInstructions()[0]->getType());
+        $this->assertInstanceOf(AddFiles::class, $step1->getInstructions()[0]->getType());
+        $this->assertInstanceOf(GenerateFiles::class, $step1->getInstructions()[1]->getType());
+        $this->assertInstanceOf(RemoveFiles::class, $step1->getInstructions()[2]->getType());
+        $this->assertInstanceOf(RunCommand::class, $step2->getInstructions()[0]->getType());
     }
 }
