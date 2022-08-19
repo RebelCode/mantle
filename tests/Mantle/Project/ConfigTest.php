@@ -8,60 +8,55 @@ use RebelCode\Mantle\InstructionType\GenerateInstructionType;
 use RebelCode\Mantle\InstructionType\RemoveInstructionType;
 use RebelCode\Mantle\InstructionType\RunInstructionType;
 use RebelCode\Mantle\Project\Config;
-use RebelCode\Mantle\Svn\SvnConfig;
 
 class ConfigTest extends TestCase
 {
-    public function test_it_should_construct()
-    {
-        $array = [
-            'buildDir' => './build',
-            'keepTempDir' => true,
-            'zipFile' => 'my-plugin.zip',
-            'devBuild' => 'my-build',
-            'svn' => [
-                'build' => 'my_build',
-                'trunkCommit' => 'Test commit message',
-                'tagCommit' => 'Test commit message',
-                'checkoutDir' => './.svn',
-            ],
-        ];
-
-        $config = new Config($array);
-
-        $this->assertSame('./build', $config->buildDir);
-        $this->assertTrue($config->keepTempDir);
-        $this->assertSame('my-plugin.zip', $config->zipFileTemplate);
-        $this->assertSame('my-build', $config->devBuildName);
-
-        $this->assertInstanceOf(SvnConfig::class, $config->svn);
-        $this->assertSame($array['svn']['build'], $config->svn->build);
-        $this->assertEquals($array['svn']['trunkCommit'], $config->svn->trunkCommit);
-        $this->assertEquals($array['svn']['tagCommit'], $config->svn->tagCommit);
-        $this->assertEquals($array['svn']['checkoutDir'], $config->svn->checkoutDir);
-    }
-
-    public function test_it_should_strip_trailing_slash_in_temp_dir()
-    {
-        $array = ['buildDir' => './temp/custom-dir/',];
-
-        $config = new Config($array);
-
-        $this->assertSame('./temp/custom-dir', $config->buildDir);
-    }
-
     public function test_it_should_create_with_defaults()
     {
         $config = new Config();
 
         $this->assertEquals(sys_get_temp_dir(), $config->buildDir);
-        $this->assertFalse($config->keepTempDir);
-        $this->assertSame('{{slug}}-{{version}}-{{build}}.zip', $config->zipFileTemplate);
+        $this->assertSame('{{slug}}-{{version}}-{{build}}.zip', $config->zipFile);
+        $this->assertNull($config->devBuild);
+        $this->assertNull($config->publishBuild);
+        $this->assertEquals('.wporg', $config->checkoutDir);
+        $this->assertEquals('Update trunk to v{{version}}', $config->trunkCommit);
+        $this->assertEquals('Add tag {{version}}', $config->tagCommit);
         $this->assertArrayHasKey('add', $config->instructionTypes);
         $this->assertArrayHasKey('remove', $config->instructionTypes);
         $this->assertArrayHasKey('run', $config->instructionTypes);
         $this->assertArrayHasKey('generate', $config->instructionTypes);
-        $this->assertNull($config->svn);
+    }
+
+    public function test_it_should_create_from_array()
+    {
+        $array = [
+            'buildDir' => './build',
+            'zipFile' => 'my-plugin.zip',
+            'devBuild' => 'my-build',
+            'publishBuild' => 'my_build',
+            'trunkCommit' => 'Test commit message',
+            'tagCommit' => 'Test commit message',
+            'checkoutDir' => './.svn',
+        ];
+
+        $config = Config::fromArray($array);
+
+        $this->assertSame($array['buildDir'], $config->buildDir);
+        $this->assertSame($array['zipFile'], $config->zipFile);
+        $this->assertSame($array['devBuild'], $config->devBuild);
+        $this->assertSame($array['publishBuild'], $config->publishBuild);
+        $this->assertEquals($array['trunkCommit'], $config->trunkCommit);
+        $this->assertEquals($array['tagCommit'], $config->tagCommit);
+        $this->assertEquals($array['checkoutDir'], $config->checkoutDir);
+    }
+
+    public function test_it_should_strip_trailing_slash_in_build_dir()
+    {
+        $array = ['buildDir' => './temp/custom-dir/',];
+        $config = Config::fromArray($array);
+
+        $this->assertSame('./temp/custom-dir', $config->buildDir);
     }
 
     public function test_it_should_create_an_add_instruction()

@@ -8,31 +8,31 @@ use RebelCode\Mantle\InstructionType\AddInstructionType;
 use RebelCode\Mantle\InstructionType\GenerateInstructionType;
 use RebelCode\Mantle\InstructionType\RemoveInstructionType;
 use RebelCode\Mantle\InstructionType\RunInstructionType;
-use RebelCode\Mantle\Svn\SvnConfig;
 
 class Config
 {
     /** @var string */
     public $buildDir;
-    /** @var bool */
-    public $keepTempDir;
     /** @var string */
-    public $zipFileTemplate;
+    public $zipFile = '{{slug}}-{{version}}-{{build}}.zip';
     /** @var string|null */
-    public $devBuildName;
-    /** @var SvnConfig|null */
-    public $svn;
+    public $devBuild = null;
+    /** @var string|null */
+    public $publishBuild = null;
+    /** @var string */
+    public $trunkCommit = 'Update trunk to v{{version}}';
+    /** @var string */
+    public $tagCommit = 'Add tag {{version}}';
+    /** @var string|null */
+    public $checkoutDir = '.wporg';
     /** @var array<string,InstructionType> */
     public $instructionTypes;
 
     /** Constructor. */
-    public function __construct(array $data = [])
+    public function __construct()
     {
-        $this->buildDir = rtrim($data['buildDir'] ?? sys_get_temp_dir(), '\\/');
-        $this->keepTempDir = $data['keepTempDir'] ?? false;
-        $this->zipFileTemplate = $data['zipFile'] ?? '{{slug}}-{{version}}-{{build}}.zip';
-        $this->devBuildName = $data['devBuild'] ?? null;
-        $this->svn = isset($data['svn']) ? SvnConfig::fromArray($data['svn']) : null;
+        $this->buildDir = sys_get_temp_dir();
+        $this->devBuild = $data['devBuild'] ?? null;
         $this->instructionTypes = [
             'add' => new AddInstructionType(),
             'generate' => new GenerateInstructionType(),
@@ -41,22 +41,45 @@ class Config
         ];
     }
 
-    /** Retrieves the path to the temporary build files directory. */
-    public function getBuildDir(): string
+    /** Creates a config instance from an array of data. */
+    public static function fromArray(array $data): self
     {
-        return $this->buildDir;
+        $config = new self();
+
+        foreach ($data as $key => $value) {
+            if (!property_exists(self::class, $key)) {
+                throw new InvalidArgumentException("Invalid property \"$key\" in config");
+            }
+
+            switch ($key) {
+                case 'buildDir':
+                    $config->buildDir = rtrim($value, '\\/');
+                    break;
+                default:
+                    $config->$key = $value;
+                    break;
+            }
+        }
+
+        return $config;
     }
 
-    /** Retrieves the name of the build to use by default for development. */
-    public function getDevBuildName(): ?string
+    /** Retrieves the file name of the zip file for a build. */
+    public function getZipFileName(Build $build): string
     {
-        return $this->devBuildName;
+        return $build->interpolate($this->zipFile);
     }
 
-    /** Retrieves the template for zip file filenames. */
-    public function getZipFileTemplate(): string
+    /** Retrieves the trunk commit message, with any placeholders replaced. */
+    public function getSvnTrunkCommitMsg(Build $build): string
     {
-        return $this->zipFileTemplate;
+        return $build->interpolate($this->trunkCommit);
+    }
+
+    /** Retrieves the tag commit message, with any placeholders replaced.  */
+    public function getSvnTagCommitMsg(Build $build): string
+    {
+        return $build->interpolate($this->tagCommit);
     }
 
     /**

@@ -356,8 +356,7 @@ class ProjectTest extends TestCase
         $this->assertEquals($data['info']['name'], $project->getInfo()->name);
         $this->assertEquals($data['info']['version'], $project->getInfo()->version);
         $this->assertEquals($data['info']['mainFile'], $project->getInfo()->mainFile);
-        $this->assertEquals($data['config']['buildDir'], $project->getConfig()->buildDir);
-        $this->assertEquals($data['config']['zipFile'], $project->getConfig()->zipFileTemplate);
+        $this->assertInstanceOf(Config::class, $project->getConfig());
         $this->assertCount(2, $project->getBuilds());
     }
 
@@ -381,7 +380,6 @@ class ProjectTest extends TestCase
                     },
                     "config": {
                         "buildDir": "./tmp/custom-dir",
-                        "keepTempDir": true,
                         "zipFile": "build-{{version}}.zip"
                     },
                     "builds": {
@@ -435,9 +433,8 @@ JSON;
             'minPhpVer' => '7.1',
         ]);
 
-        $config = new Project\Config([
+        $config = Project\Config::fromArray([
             'buildDir' => './tmp/custom-dir',
-            'keepTempDir' => true,
             'zipFile' => 'build-{{version}}.zip',
         ]);
 
@@ -588,7 +585,7 @@ JSON;
     public function test_it_should_zip_directory()
     {
         $project = new Project(dirname(static::ZIP_FILE_PATH), new Config(), new Info('', '', ''), []);
-        $project->getConfig()->zipFileTemplate = 'build.zip';
+        $project->getConfig()->zipFile = 'build.zip';
         $project->getConfig()->buildDir = MANTLE_TESTS_DIR . '/sample';
         $project->getInfo()->slug = 'test';
         $project->addBuild(new Build('test', $project));

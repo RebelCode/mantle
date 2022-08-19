@@ -244,7 +244,7 @@ class Project
         }
 
         // Create the zip file from the temp directory
-        $zipFilePath = $this->path . '/' . $build->getZipFileName();
+        $zipFilePath = $this->path . '/' . $this->config->getZipFileName($build);
         $zipInputPath = $this->config->buildDir;
         $zipInternalFolder = $this->info->slug . '/';
         Utils::zipDirectory($zipFilePath, $zipInputPath, $zipInternalFolder);
@@ -312,7 +312,7 @@ class Project
         foreach ($data as $key => $value) {
             switch ($key) {
                 case 'config':
-                    $project->config = new Config($value ?? []);
+                    $project->config = Config::fromArray($value ?? []);
                     break;
                 case 'builds':
                     $project->builds = [];

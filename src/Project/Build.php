@@ -230,12 +230,6 @@ class Build
         }
     }
 
-    /** Retrieves the file name of the zip file for this build. */
-    public function getZipFileName(): string
-    {
-        return $this->interpolate($this->project->getConfig()->zipFileTemplate);
-    }
-
     /** Interpolates a string using the token map. */
     public function interpolate(string $template): string
     {

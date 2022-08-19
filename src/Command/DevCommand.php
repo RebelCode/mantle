@@ -23,7 +23,7 @@ class DevCommand extends BaseCommand
 
     protected function runCommand(Project $project, MantleOutputStyle $io, InputInterface $input): int
     {
-        $buildName = $input->getArgument('build') ?? $project->getConfig()->devBuildName;
+        $buildName = $input->getArgument('build') ?? $project->getConfig()->devBuild;
 
         if (empty($buildName)) {
             $io->error(
