@@ -5,11 +5,16 @@ namespace RebelCode\Mantle;
 use InvalidArgumentException;
 use RebelCode\Mantle\InstructionType\GenerateFiles;
 use RebelCode\Mantle\InstructionType\GenerateReadme;
+use RebelCode\Mantle\InstructionType\SvnCheckoutRepo;
+use RebelCode\Mantle\InstructionType\SvnCheckTagAlreadyExists;
+use RebelCode\Mantle\InstructionType\SvnCreateTag;
+use RebelCode\Mantle\InstructionType\SvnUpdateTrunk;
 use RebelCode\Mantle\Project\Build;
 use RebelCode\Mantle\Project\Config;
 use RebelCode\Mantle\Project\Info;
 use RebelCode\Mantle\Project\Instruction;
 use RebelCode\Mantle\Project\Step;
+use RebelCode\Mantle\Svn\SvnRepo;
 use RuntimeException;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -126,6 +131,20 @@ class Project
     public function setConfig(Config $config): void
     {
         $this->config = $config;
+    }
+
+    /** Retrieves the project's WordPress.org SVN repository. */
+    public function getSvnRepo(): ?SvnRepo
+    {
+        if ($this->info->wpOrg === null || $this->info->wpOrg->slug === null) {
+            throw new RuntimeException(
+                'The plugin\'s WordPress.org slug is missing. Add "info.wporg.slug" to your mantle.json file.'
+            );
+        }
+
+        $url = "https://plugins.svn.wordpress.org/{$this->info->wpOrg->slug}/";
+
+        return new SvnRepo(Utils::path([$this->path, '.wporg']), 'https://github.com/mecha/svn-test');
     }
 
     /** Retrieves the project's IO. */
@@ -294,6 +313,19 @@ class Project
         }
 
         return new Step('Generating plugin files', $instructions);
+    }
+
+    /** Retrieves the step that runs after a build to publish the project to WordPress.org. */
+    public function getPublishStep(): Step
+    {
+        $repo = $this->getSvnRepo();
+
+        return new Project\Step('Publish to SVN repository', [
+            new Instruction(new SvnCheckoutRepo($repo), []),
+            new Instruction(new SvnCheckTagAlreadyExists($repo), []),
+            new Instruction(new SvnUpdateTrunk($repo), []),
+            new Instruction(new SvnCreateTag($repo), []),
+        ]);
     }
 
     /**
