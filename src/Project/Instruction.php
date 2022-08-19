@@ -16,7 +16,7 @@ class Instruction
      * @param InstructionType $type
      * @param array $args
      */
-    public function __construct(InstructionType $type, array $args)
+    public function __construct(InstructionType $type, array $args = [])
     {
         $this->type = $type;
         $this->args = $args;
