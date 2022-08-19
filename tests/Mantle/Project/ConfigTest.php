@@ -23,7 +23,6 @@ class ConfigTest extends TestCase
                 'build' => 'my_build',
                 'trunkCommitMessage' => 'Test commit message',
                 'tagCommitMessage' => 'Test commit message',
-                'autoStableTag' => false,
                 'checkoutDir' => './.svn',
             ],
         ];
@@ -39,7 +38,6 @@ class ConfigTest extends TestCase
         $this->assertSame($array['svn']['build'], $config->svn->build);
         $this->assertEquals($array['svn']['trunkCommitMessage'], $config->svn->trunkCommitMessage);
         $this->assertEquals($array['svn']['tagCommitMessage'], $config->svn->tagCommitMessage);
-        $this->assertEquals($array['svn']['autoStableTag'], $config->svn->autoStableTag);
         $this->assertEquals($array['svn']['checkoutDir'], $config->svn->checkoutDir);
     }
 

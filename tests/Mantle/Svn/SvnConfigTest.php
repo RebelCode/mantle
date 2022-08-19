@@ -14,15 +14,13 @@ class SvnConfigTest extends TestCase
         $build = 'my_build';
         $trunkCommitMessage = 'My trunk commit message';
         $tagCommitMessage = 'My tag commit message';
-        $autoStableTag = true;
         $checkoutDir = './svn';
 
-        $config = new SvnConfig($build, $trunkCommitMessage, $tagCommitMessage, $autoStableTag, $checkoutDir);
+        $config = new SvnConfig($build, $trunkCommitMessage, $tagCommitMessage, $checkoutDir);
 
         $this->assertEquals($build, $config->build);
         $this->assertEquals($trunkCommitMessage, $config->trunkCommitMessage);
         $this->assertEquals($tagCommitMessage, $config->tagCommitMessage);
-        $this->assertEquals($autoStableTag, $config->autoStableTag);
         $this->assertEquals($checkoutDir, $config->checkoutDir);
     }
 
@@ -33,7 +31,6 @@ class SvnConfigTest extends TestCase
         $this->assertEquals('', $config->build);
         $this->assertEquals('Update trunk to v{{version}}', $config->trunkCommitMessage);
         $this->assertEquals('Add tag {{version}}', $config->tagCommitMessage);
-        $this->assertEquals(false, $config->autoStableTag);
         $this->assertNull($config->checkoutDir);
     }
 
@@ -43,7 +40,6 @@ class SvnConfigTest extends TestCase
             'build' => 'my_build',
             'trunkCommitMessage' => 'My trunk commit message',
             'tagCommitMessage' => 'My tag commit message',
-            'autoStableTag' => true,
             'checkoutDir' => './svn',
         ];
 
@@ -52,7 +48,6 @@ class SvnConfigTest extends TestCase
         $this->assertEquals($array['build'], $config->build);
         $this->assertEquals($array['trunkCommitMessage'], $config->trunkCommitMessage);
         $this->assertEquals($array['tagCommitMessage'], $config->tagCommitMessage);
-        $this->assertEquals($array['autoStableTag'], $config->autoStableTag);
         $this->assertEquals($array['checkoutDir'], $config->checkoutDir);
     }
 

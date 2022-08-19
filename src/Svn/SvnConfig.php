@@ -14,10 +14,8 @@ class SvnConfig
     public $trunkCommitMessage = 'Update trunk to v{{version}}';
     /** @var string */
     public $tagCommitMessage = 'Add tag {{version}}';
-    /** @var bool */
-    public $autoStableTag = false;
     /** @var string|null */
-    public $checkoutDir = null;
+    public $checkoutDir = '.wporg';
 
     /**
      * Constructor.
@@ -25,20 +23,17 @@ class SvnConfig
      * @param string $build The name of the build to be published to the WordPress.org SVN repository.
      * @param string|null $trunkCommitMessage The commit message to use when updating the trunk.
      * @param string|null $tagCommitMessage The commit message to use when adding a tag.
-     * @param bool $autoStableTag Whether to automatically create a stable tag when a new stable version is published.
      * @param string|null $checkoutDir The path to the directory to use to checkout the repository.
      */
     public function __construct(
         string $build,
         ?string $trunkCommitMessage = null,
         ?string $tagCommitMessage = null,
-        bool $autoStableTag = false,
         ?string $checkoutDir = null
     ) {
         $this->build = $build;
         $this->trunkCommitMessage = $trunkCommitMessage ?? $this->trunkCommitMessage;
         $this->tagCommitMessage = $tagCommitMessage ?? $this->tagCommitMessage;
-        $this->autoStableTag = $autoStableTag;
         $this->checkoutDir = $checkoutDir;
     }
 
