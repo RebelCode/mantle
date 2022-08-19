@@ -8,7 +8,7 @@ use RebelCode\Mantle\InstructionType\GenerateInstructionType;
 use RebelCode\Mantle\InstructionType\RemoveInstructionType;
 use RebelCode\Mantle\InstructionType\RunInstructionType;
 use RebelCode\Mantle\Project\Config;
-use RebelCode\Mantle\Project\Instruction;
+use RebelCode\Mantle\Svn\SvnConfig;
 
 class ConfigTest extends TestCase
 {
@@ -18,7 +18,14 @@ class ConfigTest extends TestCase
             'tempDir' => './build',
             'keepTempDir' => true,
             'zipFile' => 'my-plugin.zip',
-            'devBuild' => 'my-build'
+            'devBuild' => 'my-build',
+            'svn' => [
+                'build' => 'my_build',
+                'trunkCommitMessage' => 'Test commit message',
+                'tagCommitMessage' => 'Test commit message',
+                'autoStableTag' => false,
+                'checkoutDir' => './.svn',
+            ],
         ];
 
         $config = new Config($array);
@@ -27,6 +34,13 @@ class ConfigTest extends TestCase
         $this->assertTrue($config->keepTempDir);
         $this->assertSame('my-plugin.zip', $config->zipFileTemplate);
         $this->assertSame('my-build', $config->devBuildName);
+
+        $this->assertInstanceOf(SvnConfig::class, $config->svn);
+        $this->assertSame($array['svn']['build'], $config->svn->build);
+        $this->assertEquals($array['svn']['trunkCommitMessage'], $config->svn->trunkCommitMessage);
+        $this->assertEquals($array['svn']['tagCommitMessage'], $config->svn->tagCommitMessage);
+        $this->assertEquals($array['svn']['autoStableTag'], $config->svn->autoStableTag);
+        $this->assertEquals($array['svn']['checkoutDir'], $config->svn->checkoutDir);
     }
 
     public function test_it_should_strip_trailing_slash_in_temp_dir()
@@ -49,6 +63,7 @@ class ConfigTest extends TestCase
         $this->assertArrayHasKey('remove', $config->instructionTypes);
         $this->assertArrayHasKey('run', $config->instructionTypes);
         $this->assertArrayHasKey('generate', $config->instructionTypes);
+        $this->assertNull($config->svn);
     }
 
     public function test_it_should_create_an_add_instruction()

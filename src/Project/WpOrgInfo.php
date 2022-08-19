@@ -16,8 +16,6 @@ class WpOrgInfo
     public $contributors = [];
     /** @var string|null */
     public $testedUpTo = null;
-    /** @var SvnConfig */
-    public $svn;
 
     /**
      * Constructor.
@@ -33,15 +31,13 @@ class WpOrgInfo
         ?string $name = null,
         ?string $testedUpTo = null,
         array $tags = [],
-        array $contributors = [],
-        ?SvnConfig $svnConfig = null
+        array $contributors = []
     ) {
         $this->slug = $slug;
         $this->name = $name;
         $this->testedUpTo = $testedUpTo;
         $this->tags = $tags;
         $this->contributors = $contributors;
-        $this->svn = $svnConfig ?? new SvnConfig();
     }
 
     /** Creates an instance from an array. */
@@ -54,9 +50,7 @@ class WpOrgInfo
                 throw new InvalidArgumentException("Invalid property \"$key\" in wordpress.org meta data");
             }
 
-            $instance->$key = ($key === 'svn')
-                ? SvnConfig::fromArray($value)
-                : $value;
+            $instance->$key = $value;
         }
 
         return $instance;

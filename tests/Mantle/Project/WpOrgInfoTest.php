@@ -3,9 +3,8 @@
 namespace RebelCode\Mantle\Tests\Project;
 
 use InvalidArgumentException;
-use RebelCode\Mantle\Project\SvnConfig;
-use RebelCode\Mantle\Project\WpOrgInfo;
 use PHPUnit\Framework\TestCase;
+use RebelCode\Mantle\Project\WpOrgInfo;
 
 class WpOrgInfoTest extends TestCase
 {
@@ -34,13 +33,6 @@ class WpOrgInfoTest extends TestCase
             'testedUpTo' => '4.0',
             'tags' => ['tag1', 'tag2'],
             'contributors' => ['contributor1', 'contributor2'],
-            'svn' => [
-                'build' => 'my_build',
-                'trunkCommitMessage' => 'Test commit message',
-                'tagCommitMessage' => 'Test commit message',
-                'autoStableTag' => false,
-                'checkoutDir' => './.svn',
-            ],
         ];
 
         $info = WpOrgInfo::fromArray($array);
@@ -50,12 +42,6 @@ class WpOrgInfoTest extends TestCase
         $this->assertSame($array['testedUpTo'], $info->testedUpTo);
         $this->assertSame($array['tags'], $info->tags);
         $this->assertSame($array['contributors'], $info->contributors);
-        $this->assertInstanceOf(SvnConfig::class, $info->svn);
-        $this->assertSame($array['svn']['build'], $info->svn->build);
-        $this->assertEquals($array['svn']['trunkCommitMessage'], $info->svn->trunkCommitMessage);
-        $this->assertEquals($array['svn']['tagCommitMessage'], $info->svn->tagCommitMessage);
-        $this->assertEquals($array['svn']['autoStableTag'], $info->svn->autoStableTag);
-        $this->assertEquals($array['svn']['checkoutDir'], $info->svn->checkoutDir);
     }
 
     public function test_it_should_construct_from_array_with_defaults()

@@ -1,8 +1,9 @@
 <?php
 
-namespace RebelCode\Mantle\Project;
+namespace RebelCode\Mantle\Svn;
 
 use InvalidArgumentException;
+use RebelCode\Mantle\Project\Build;
 
 /** Configuration for the WordPress.org SVN repository.  */
 class SvnConfig

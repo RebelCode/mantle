@@ -1,10 +1,10 @@
 <?php
 
-namespace RebelCode\Mantle\Tests\Project;
+namespace RebelCode\Mantle\Tests\Svn;
 
 use RebelCode\Mantle\Project;
 use RebelCode\Mantle\Project\Build;
-use RebelCode\Mantle\Project\SvnConfig;
+use RebelCode\Mantle\Svn\SvnConfig;
 use PHPUnit\Framework\TestCase;
 
 class SvnConfigTest extends TestCase

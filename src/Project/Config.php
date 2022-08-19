@@ -8,6 +8,7 @@ use RebelCode\Mantle\InstructionType\AddInstructionType;
 use RebelCode\Mantle\InstructionType\GenerateInstructionType;
 use RebelCode\Mantle\InstructionType\RemoveInstructionType;
 use RebelCode\Mantle\InstructionType\RunInstructionType;
+use RebelCode\Mantle\Svn\SvnConfig;
 
 class Config
 {
@@ -19,6 +20,8 @@ class Config
     public $zipFileTemplate;
     /** @var string|null */
     public $devBuildName;
+    /** @var SvnConfig|null */
+    public $svn;
     /** @var array<string,InstructionType> */
     public $instructionTypes;
 
@@ -29,6 +32,7 @@ class Config
         $this->keepTempDir = $data['keepTempDir'] ?? false;
         $this->zipFileTemplate = $data['zipFile'] ?? '{{slug}}-{{version}}-{{build}}.zip';
         $this->devBuildName = $data['devBuild'] ?? null;
+        $this->svn = isset($data['svn']) ? SvnConfig::fromArray($data['svn']) : null;
         $this->instructionTypes = [
             'add' => new AddInstructionType(),
             'generate' => new GenerateInstructionType(),
