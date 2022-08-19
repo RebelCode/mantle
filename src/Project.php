@@ -271,6 +271,39 @@ class Project
         $this->io->topLevel("Packaged <fg=cyan>$buildName</> into <fg=blue>$zipFilePath</>");
     }
 
+    /** Publishes the plugin to WordPress.org. */
+    public function publish()
+    {
+        $repo = $this->getSvnRepo();
+        $buildName = $this->config->publishBuild;
+
+        if ($buildName === null) {
+            if (count($this->builds) === 1) {
+                $build = $this->builds[0];
+            } else {
+                throw new RuntimeException(
+                    'This project has multiple builds. Add "config.publishBuild" in your mantle.json file to specify which build should be published to WordPress.org.'
+                );
+            }
+        } else {
+            $build = $this->getBuild($buildName);
+            if ($build === null) {
+                throw new RuntimeException("Build \"$buildName\" does not exist in this project.");
+            }
+        }
+
+        $svnVersion = $repo->getClientVersion();
+        if ($svnVersion === null) {
+            throw new RuntimeException('Could not determine SVN version. Is SVN installed?');
+        }
+
+        $this->io->topLevel("Publishing to WordPress.org (using svn v{$svnVersion})");
+
+        $this->clean();
+        $this->build($build->getName());
+        $this->getPublishStep()->run($build);
+    }
+
     /** Creates a copy of the project, for development purposes. */
     public function getForDevelopment(): Project
     {
