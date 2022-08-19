@@ -11,6 +11,11 @@ class MantleOutputStyle extends SymfonyStyle
         $this->writeln("=> $message");
     }
 
+    public function checkMark(): void
+    {
+        $this->writeln(' <fg=green>✓</fg=green>');
+    }
+
     public function writeBuild(string $name): void
     {
         $this->topLevel("Building <fg=cyan>$name</>");
@@ -30,7 +35,7 @@ class MantleOutputStyle extends SymfonyStyle
     public function endStep()
     {
         if ($this->getVerbosity() <= self::VERBOSITY_NORMAL) {
-            $this->writeln(' <fg=green>✓</fg=green>');
+            $this->checkMark();
         }
     }
 
