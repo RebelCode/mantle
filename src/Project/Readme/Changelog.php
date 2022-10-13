@@ -34,12 +34,14 @@ class Changelog
                 $lines[] = $version->message;
             }
 
+            $didCategory = false;
             foreach ($version->categories as $category) {
                 $entries = array_filter($category->entries, function (ChangelogEntry $entry) use ($tags) {
                     return count($tags) === 0 || in_array($entry->tag ?? '', $tags);
                 });
 
                 if (count($entries) > 0) {
+                    $didCategory = true;
                     $categoryText = ucfirst($category->type);
                     $lines[] = "#### {$categoryText}";
 
@@ -56,9 +58,13 @@ class Changelog
                     }
                 }
             }
+
+            if (!$didCategory) {
+                $lines[] = '';
+            }
         }
 
-        return implode("\n", $lines);
+        return trim(implode("\n", $lines));
     }
 
     /**

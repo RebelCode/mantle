@@ -2,9 +2,9 @@
 
 namespace RebelCode\Mantle\Tests\Project\Readme;
 
+use PHPUnit\Framework\TestCase;
 use RebelCode\Mantle\Project;
 use RebelCode\Mantle\Project\Readme\Changelog;
-use PHPUnit\Framework\TestCase;
 use RebelCode\Mantle\Project\Readme\Changelog\ChangelogCategory;
 use RebelCode\Mantle\Project\Readme\Changelog\ChangelogEntry;
 use RebelCode\Mantle\Project\Readme\Changelog\ChangelogVersion;
@@ -243,6 +243,39 @@ class ChangelogTest extends TestCase
         ### 0.2 (2022-02-02)
         #### Fixed
         - Fixed a bug
+        
+        ### 0.1 (2022-01-01)
+        Initial release
+        CHANGELOG;
+
+        $this->assertEquals($expected, $changelog->toWpOrgFormat(['pro'], false));
+    }
+
+    public function test_it_should_skip_empty_versions()
+    {
+        $changelog = new Changelog([
+            new ChangelogVersion('0.3', '2022-03-03', '', [
+                new ChangelogCategory(ChangelogCategory::ADDED, [
+                    new ChangelogEntry('Added a feature'),
+                ]),
+                new ChangelogCategory(ChangelogCategory::CHANGED, [
+                    new ChangelogEntry('Fixed typos'),
+                    new ChangelogEntry('Improved UX', 'pro'),
+                ]),
+            ]),
+            new ChangelogVersion('0.2', '2022-02-02', '', [
+                new ChangelogCategory(ChangelogCategory::ADDED, []),
+                new ChangelogCategory(ChangelogCategory::FIXED, []),
+            ]),
+            new ChangelogVersion('0.1', '2022-01-01', 'Initial release'),
+        ]);
+
+        $expected = <<<CHANGELOG
+        ### 0.3 (2022-03-03)
+        #### Changed
+        - Improved UX
+        
+        ### 0.2 (2022-02-02)
         
         ### 0.1 (2022-01-01)
         Initial release
