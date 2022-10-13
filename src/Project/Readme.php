@@ -150,7 +150,7 @@ class Readme
             $changelog = Changelog::parseMarkdown($changelogMd);
 
             $string .= "== Changelog ==\n\n";
-            $string .= $changelog->toWpOrgFormat();
+            $string .= $changelog->toWpOrgFormat(['', $project->getConfig()->publishBuild]);
             $string .= "\n";
         }
 
