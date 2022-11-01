@@ -144,7 +144,7 @@ class Project
 
         $url = "https://plugins.svn.wordpress.org/{$this->info->wpOrg->slug}/";
 
-        return new SvnRepo(Utils::path([$this->path, '.wporg']), 'https://github.com/mecha/svn-test');
+        return new SvnRepo(Utils::path([$this->path, '.wporg']), $url);
     }
 
     /** Retrieves the project's IO. */
