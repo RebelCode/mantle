@@ -143,7 +143,8 @@ class Readme
             $string .= "== Screenshots ==\n\n";
 
             foreach ($this->screenshots as $idx => $caption) {
-                $string .= "$idx. $caption\n";
+                $num = $idx + 1;
+                $string .= "{$num}. $caption\n";
             }
 
             $string .= "\n";
