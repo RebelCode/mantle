@@ -21,7 +21,7 @@
     "test": "vendor/bin/phpunit"
   },
   "require": {
-    "php": ">=7.3",
+    "php": ">=7.2.5",
     "ext-json": "*",
     "ext-zip": "*",
     "ext-dom": "*",
@@ -47,7 +47,7 @@
   },
   "config": {
     "platform": {
-      "php": "7.3.0"
+      "php": "7.2.5"
     }
   }
 }
