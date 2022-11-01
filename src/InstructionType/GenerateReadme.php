@@ -14,8 +14,12 @@ class GenerateReadme implements InstructionType
         $project = $build->getProject();
 
         $outPath = $project->getConfig()->buildDir . '/readme.txt';
-        $readme = Project\Readme::fromFilesInDir($project->getReadmeDirPath());
+        $readmeDirPath = $project->getReadmeDirPath();
 
-        file_put_contents($outPath, $readme->render($project));
+        if ($readmeDirPath !== null) {
+            $readme = Project\Readme::fromFilesInDir($readmeDirPath);
+
+            file_put_contents($outPath, $readme->render($project));
+        }
     }
 }
