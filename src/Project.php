@@ -237,6 +237,11 @@ class Project
         if (file_exists($mainFile)) {
             unlink($mainFile);
         }
+
+        $readmeFile = $this->getPath() . '/readme.txt';
+        if (file_exists($readmeFile)) {
+            unlink($readmeFile);
+        }
     }
 
     /** Runs a specific build, with an optional list of steps. If omitted, all steps are run. */
