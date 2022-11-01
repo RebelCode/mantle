@@ -16,7 +16,7 @@ class RemoveFilesTest extends TestCase
     {
         $this->assertInstanceOf(
             InstructionType::class,
-            new RemoveFiles([]),
+            new RemoveFiles(),
             RemoveFiles::class . ' must implement ' . InstructionType::class . ' interface'
         );
     }
