@@ -31,7 +31,7 @@ class Config
     /** Constructor. */
     public function __construct()
     {
-        $this->buildDir = sys_get_temp_dir();
+        $this->buildDir = sys_get_temp_dir() . '/mantle-build';
         $this->devBuild = $data['devBuild'] ?? null;
         $this->instructionTypes = [
             'add' => new AddFiles(),
