@@ -61,14 +61,20 @@ class Readme
             : '';
 
         $faqs = [];
-        foreach (new DirectoryIterator($path . '/faqs') as $faqFile) {
-            if ($faqFile instanceof SplFileInfo && $faqFile->isFile()) {
-                $faqs[] = Faq::fromFile($faqFile->getPathname());
+        if (is_dir($path . '/faqs')) {
+            foreach (new DirectoryIterator($path . '/faqs') as $faqFile) {
+                if ($faqFile instanceof SplFileInfo && $faqFile->isFile()) {
+                    $faqs[] = Faq::fromFile($faqFile->getPathname());
+                }
             }
         }
 
-        $screenshots = file($path . '/screenshots.md', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        $screenshots + array_map('trim', $screenshots);
+        if (is_readable($path . '/screenshots.md')) {
+            $screenshots = file($path . '/screenshots.md', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            $screenshots = array_map('trim', $screenshots);
+        } else {
+            $screenshots = [];
+        }
 
         return new self(
             $excerpt,
