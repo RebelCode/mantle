@@ -128,7 +128,7 @@ class Readme
         }
 
         if (count($this->faqs) > 0) {
-            $string .= "== FAQs ==\n\n";
+            $string .= "\n== FAQs ==\n\n";
 
             $faqStrings = [];
 
