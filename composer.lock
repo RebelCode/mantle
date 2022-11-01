@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c83641fdeff67bee3c08e0128b5f149",
+    "content-hash": "2b01c9bb7657a4df167370de908f6c82",
     "packages": [
         {
             "name": "league/commonmark",
@@ -2674,7 +2674,8 @@
         "php": ">=7.2.5",
         "ext-json": "*",
         "ext-zip": "*",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "composer-runtime-api": "^2.2"
     },
     "platform-dev": [],
     "platform-overrides": {

@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-use Composer\Autoload\ClassLoader;
 use RebelCode\Mantle\Command\BuildCommand;
 use RebelCode\Mantle\Command\CleanCommand;
 use RebelCode\Mantle\Command\DevCommand;
@@ -9,18 +8,7 @@ use RebelCode\Mantle\Command\InitCommand;
 use RebelCode\Mantle\Command\PublishCommand;
 use Symfony\Component\Console\Application;
 
-if (!class_exists(ClassLoader::class)) {
-    foreach ([getcwd(), __DIR__ . '/..'] as $path) {
-        $autoload = $path . '/vendor/autoload.php';
-        if (file_exists($autoload)) {
-            require_once $autoload;
-            break;
-        }
-    }
-
-    fprintf(STDERR, 'Cannot find the Composer autoloader. Did you run "composer install"?' . PHP_EOL);
-    exit(1);
-}
+include $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
 
 const MANTLE_LOGO = <<<LOGO
                            _    _       

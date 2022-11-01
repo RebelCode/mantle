@@ -25,6 +25,7 @@
     "ext-json": "*",
     "ext-zip": "*",
     "ext-dom": "*",
+    "composer-runtime-api": "^2.2",
     "symfony/console": "^5.0",
     "league/commonmark": "^1.6",
     "symfony/dom-crawler": "^5.4",
