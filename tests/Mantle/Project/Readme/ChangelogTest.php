@@ -30,27 +30,27 @@ class ChangelogTest extends TestCase
         $project->addBuild(new Project\Build('foo', $project));
         $project->addBuild(new Project\Build('bar', $project));
 
-        $markdown = <<<MARKDOWN
-        # Change log
-        All notable changes to this project will be documented in this file.
-        
-        The format is based on [Keep a Changelog](http://keepachangelog.com/)
-        and this project adheres to [Semantic Versioning](http://semver.org/).
-
-        ## [Unreleased]
-        ### Added
-        - (Else) Added a feature
-
-        ## [1.0.0] - 2022-08-12
-        ### Added
-        - (Foo) Added a feature
-        
-        ### Fixed
-        - (Bar) Fixed a bug
-        
-        ## [0.1] - 2022-03-15
-        Initial release
-        MARKDOWN;
+        $markdown = implode("\n", [
+            "# Change log",
+            '',
+            'All notable changes to this project will be documented in this file.',
+            'The format is based on [Keep a Changelog](https://keepachangelog.com/)',
+            'and this project adheres to [Semantic Versioning](https://semver.org/).',
+            '',
+            '## [Unreleased]',
+            '### Added',
+            '- (Else) Added a feature',
+            '',
+            '## [1.0.0] - 2022-08-12',
+            '### Added',
+            '- (Foo) Added a feature',
+            '',
+            '### Fixed',
+            '- (Bar) Fixed a bug',
+            '',
+            '## [0.1] - 2022-03-15',
+            'Initial release',
+        ]);
 
         $changelog = Changelog::parseMarkdown($markdown, $project);
 
@@ -103,26 +103,26 @@ class ChangelogTest extends TestCase
             new ChangelogVersion('0.1', '2022-01-01', 'Initial release'),
         ]);
 
-        $expected = <<<CHANGELOG
-        ### 0.3 (2022-03-03)
-        #### Added
-        - Added a feature
-        
-        #### Changed
-        - Fixed typos
-        - (pro) Improved UX
-        
-        ### 0.2 (2022-02-02)
-        #### Added
-        - Added a feature
-        - Added another feature
-        
-        #### Fixed
-        - (pro) Fixed a bug
-        
-        ### 0.1 (2022-01-01)
-        Initial release
-        CHANGELOG;
+        $expected = implode("\n", [
+            '### 0.3 (2022-03-03)',
+            '#### Added',
+            '- Added a feature',
+            '',
+            '#### Changed',
+            '- Fixed typos',
+            '- (pro) Improved UX',
+            '',
+            '### 0.2 (2022-02-02)',
+            '#### Added',
+            '- Added a feature',
+            '- Added another feature',
+            '',
+            '#### Fixed',
+            '- (pro) Fixed a bug',
+            '',
+            '### 0.1 (2022-01-01)',
+            'Initial release',
+        ]);
 
         $this->assertEquals($expected, $changelog->toWpOrgFormat());
     }
@@ -151,22 +151,22 @@ class ChangelogTest extends TestCase
             new ChangelogVersion('0.1', '2022-01-01', 'Initial release'),
         ]);
 
-        $expected = <<<CHANGELOG
-        ### 0.3 (2022-03-03)
-        #### Added
-        - Added a feature
-        
-        #### Changed
-        - Fixed typos
-        
-        ### 0.2 (2022-02-02)
-        #### Added
-        - Added a feature
-        - Added another feature
-        
-        ### 0.1 (2022-01-01)
-        Initial release
-        CHANGELOG;
+        $expected = implode("\n", [
+            '### 0.3 (2022-03-03)',
+            '#### Added',
+            '- Added a feature',
+            '',
+            '#### Changed',
+            '- Fixed typos',
+            '',
+            '### 0.2 (2022-02-02)',
+            '#### Added',
+            '- Added a feature',
+            '- Added another feature',
+            '',
+            '### 0.1 (2022-01-01)',
+            'Initial release',
+        ]);
 
         $this->assertEquals($expected, $changelog->toWpOrgFormat(['']));
     }
@@ -195,18 +195,18 @@ class ChangelogTest extends TestCase
             new ChangelogVersion('0.1', '2022-01-01', 'Initial release'),
         ]);
 
-        $expected = <<<CHANGELOG
-        ### 0.3 (2022-03-03)
-        #### Changed
-        - (pro) Improved UX
-        
-        ### 0.2 (2022-02-02)
-        #### Fixed
-        - (pro) Fixed a bug
-        
-        ### 0.1 (2022-01-01)
-        Initial release
-        CHANGELOG;
+        $expected = implode("\n", [
+            '### 0.3 (2022-03-03)',
+            '#### Changed',
+            '- (pro) Improved UX',
+            '',
+            '### 0.2 (2022-02-02)',
+            '#### Fixed',
+            '- (pro) Fixed a bug',
+            '',
+            '### 0.1 (2022-01-01)',
+            'Initial release',
+        ]);
 
         $this->assertEquals($expected, $changelog->toWpOrgFormat(['pro']));
     }
@@ -235,18 +235,18 @@ class ChangelogTest extends TestCase
             new ChangelogVersion('0.1', '2022-01-01', 'Initial release'),
         ]);
 
-        $expected = <<<CHANGELOG
-        ### 0.3 (2022-03-03)
-        #### Changed
-        - Improved UX
-        
-        ### 0.2 (2022-02-02)
-        #### Fixed
-        - Fixed a bug
-        
-        ### 0.1 (2022-01-01)
-        Initial release
-        CHANGELOG;
+        $expected = implode("\n", [
+            '### 0.3 (2022-03-03)',
+            '#### Changed',
+            '- Improved UX',
+            '',
+            '### 0.2 (2022-02-02)',
+            '#### Fixed',
+            '- Fixed a bug',
+            '',
+            '### 0.1 (2022-01-01)',
+            'Initial release',
+        ]);
 
         $this->assertEquals($expected, $changelog->toWpOrgFormat(['pro'], false));
     }
@@ -270,16 +270,16 @@ class ChangelogTest extends TestCase
             new ChangelogVersion('0.1', '2022-01-01', 'Initial release'),
         ]);
 
-        $expected = <<<CHANGELOG
-        ### 0.3 (2022-03-03)
-        #### Changed
-        - Improved UX
-        
-        ### 0.2 (2022-02-02)
-        
-        ### 0.1 (2022-01-01)
-        Initial release
-        CHANGELOG;
+        $expected = implode("\n", [
+            '### 0.3 (2022-03-03)',
+            '#### Changed',
+            '- Improved UX',
+            '',
+            '### 0.2 (2022-02-02)',
+            '',
+            '### 0.1 (2022-01-01)',
+            'Initial release',
+        ]);
 
         $this->assertEquals($expected, $changelog->toWpOrgFormat(['pro'], false));
     }

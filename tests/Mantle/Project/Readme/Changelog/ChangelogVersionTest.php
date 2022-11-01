@@ -34,14 +34,15 @@ class ChangelogVersionTest extends TestCase
         $number = '1.0.0';
         $date = '2022-08-12';
 
-        $node = new Crawler(<<<HTML
-            <h2 id="h2">$number - $date</h2>
-
-            <h3>Changed</h3>
-            <ul>
-                <li>Lorem ipsum</li>
-            </ul>
-            HTML
+        $node = new Crawler(
+            implode("\n", [
+                "<h2 id=\"h2\">$number - $date</h2>",
+                '',
+                '<h3>Changed</h3>',
+                '<ul>',
+                '    <li>Lorem ipsum</li>',
+                '</ul>',
+            ])
         );
 
         $version = ChangelogVersion::fromCrawlerNode($node->filter('#h2'));
@@ -62,15 +63,16 @@ class ChangelogVersionTest extends TestCase
         $date = '2022-08-12';
         $message = 'Best release ever';
 
-        $node = new Crawler(<<<HTML
-            <h2 id="h2">$number - $date</h2>
-            <p>$message</p>
-
-            <h3>Changed</h3>
-            <ul>
-                <li>Lorem ipsum</li>
-            </ul>
-            HTML
+        $node = new Crawler(
+            implode("\n", [
+                "<h2 id=\"h2\">$number - $date</h2>",
+                "<p>$message</p>",
+                '',
+                '<h3>Changed</h3>',
+                '<ul>',
+                '    <li>Lorem ipsum</li>',
+                '</ul>',
+            ])
         );
 
         $version = ChangelogVersion::fromCrawlerNode($node->filter('#h2'));

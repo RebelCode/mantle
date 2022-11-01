@@ -25,26 +25,26 @@ class GenerateFilesTest extends TestCase
     {
         [$project, $vfs] = $this->createMockProject(
             [
-                'template.txt' => <<<TEMPLATE
-                    This is a template file for {{name}}.
-                    The version is {{version}}.
-                    Some more info about the project:
-                    * {{description}}
-                    * {{author}}
-                    * {{license}}
-                    TEMPLATE,
+                'template.txt' => implode("\n", [
+                    'This is a template file for {{name}}.',
+                    'The version is {{version}}.',
+                    'Some more info about the project:',
+                    '* {{description}}',
+                    '* {{author}}',
+                    '* {{license}}',
+                ]),
             ],
             []
         );
 
-        $expected = <<<EXPECTED
-            This is a template file for {$project->getInfo()->name}.
-            The version is {$project->getInfo()->version}.
-            Some more info about the project:
-            * {$project->getInfo()->description}
-            * {$project->getInfo()->author}
-            * {$project->getInfo()->license}
-            EXPECTED;
+        $expected = implode("\n", [
+            "This is a template file for {$project->getInfo()->name}.",
+            "The version is {$project->getInfo()->version}.",
+            'Some more info about the project:',
+            "* {$project->getInfo()->description}",
+            "* {$project->getInfo()->author}",
+            "* {$project->getInfo()->license}",
+        ]);
 
         $io = $this->createMock(MantleOutputStyle::class);
 

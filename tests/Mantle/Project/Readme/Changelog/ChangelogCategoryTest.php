@@ -45,16 +45,15 @@ class ChangelogCategoryTest extends TestCase
 
     public function test_it_should_parse_from_crawler_node()
     {
-        $node = new Crawler(
-            <<<HTML
-            <h2 id="h2">Added</h2>
+        $html = implode("\n", [
+            "<h2 id=\"h2\">Added</h2>",
+            "<ul>",
+            "    <li>Lorem ipsum</li>",
+            "    <li>Dolor sit amet</li>",
+            "</ul>"
+        ]);
 
-            <ul>
-                <li>Lorem ipsum</li>
-                <li>Dolor sit amet</li>
-            </ul>
-            HTML
-        );
+        $node = new Crawler($html);
 
         $category = ChangelogCategory::fromCrawlerNode($node->filter('#h2'));
 

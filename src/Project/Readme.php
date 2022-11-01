@@ -92,34 +92,33 @@ class Readme
         $contributors = implode(', ', $wpOrgInfo->contributors);
         $tags = implode(', ', $wpOrgInfo->tags);
 
-        $string = <<<README
-        === {$wpOrgInfo->name} ===
-        
-        Contributors: {$contributors}
-        Tags: {$tags}
-        Stable tag: {$info->version}
-        Tested up to: {$wpOrgInfo->testedUpTo}
-        Requires at least: {$info->minWpVer}
-        Requires PHP: {$info->minPhpVer}
-        License: {$info->license}
-
-        {$this->excerpt}
-        
-        == Description ==
-        
-        {$this->description}
-
-
-        README;
+        $string = implode("\n", [
+            "=== {$wpOrgInfo->name} ===",
+            '',
+            "Contributors: {$contributors}",
+            "Tags: {$tags}",
+            "Stable tag: {$info->version}",
+            "Tested up to: {$wpOrgInfo->testedUpTo}",
+            "Requires at least: {$info->minWpVer}",
+            "Requires PHP: {$info->minPhpVer}",
+            "License: {$info->license}",
+            '',
+            $this->excerpt,
+            '',
+            '== Description ==',
+            '',
+            $this->description,
+            '',
+        ]);
 
         if ($this->installation) {
-            $string .= <<<README
-            == Installation ==
-            
-            {$this->installation}
-            
-
-            README;
+            $string .= implode("\n", [
+                '',
+                '== Installation ==',
+                '',
+                $this->installation,
+                '',
+            ]);
         }
 
         if (count($this->faqs) > 0) {

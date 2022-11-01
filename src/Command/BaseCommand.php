@@ -33,7 +33,7 @@ abstract class BaseCommand extends Command
             'ver',
             null,
             InputOption::VALUE_REQUIRED,
-            'Optional override for the version of the build',
+            'Optional override for the version of the build'
         );
     }
 

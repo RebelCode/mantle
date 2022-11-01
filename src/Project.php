@@ -337,7 +337,7 @@ class Project
                 [
                     $this->getMainFileTemplatePath(),
                     basename($this->getMainFilePath()),
-                ],
+                ]
             ),
         ];
 
